@@ -41,7 +41,9 @@ p{margin:0 0 12px}
 .btn.ghost:hover{background:var(--ink);color:#fff}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .counter{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);display:grid;gap:2px}
-.counter b{font-family:var(--mono);font-weight:600;font-size:28px;font-variant-numeric:tabular-nums}
+.cnt{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.counter b{font-family:var(--mono);font-weight:900;font-size:clamp(34px,10vw,44px);line-height:1.1;color:#FF5515;font-variant-numeric:tabular-nums}
+.cnt span{font-size:17px;color:var(--ink)}
 .small{font-size:13px;color:var(--muted)}
 
 /* draw: chance wheel */
@@ -186,9 +188,8 @@ p{margin:0 0 12px}
       <span class="small">（遊戲需 2 分鐘）</span>
     </div>
     <div class="counter">
-      <span class="small">打開這頁時，全球脆弱地區的婦女兒童花了</span>
-      <b id="hrs">0</b>
-      <span class="small">小時在取水……（每天超過 2 億小時，<a href="https://www.unicef.org/press-releases/unicef-collecting-water-often-colossal-waste-time-women-and-girls" target="_blank" rel="noopener">UNICEF</a>）</span>
+      <span class="small">打開這頁時，全球脆弱地區婦女與兒童花了</span>
+      <div class="cnt"><b id="hrs">0</b><span>小時 取水</span></div>
     </div>
   </section>
 
