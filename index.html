@@ -46,11 +46,15 @@ p{margin:0 0 12px}
 
 /* draw: chance wheel */
 .wheelbox{display:grid;justify-items:center;gap:16px;margin:16px 0 8px}
-.wheel{position:relative;width:min(320px,86vw);aspect-ratio:1;max-width:100%}
+.wheel{cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;width:min(320px,86vw);aspect-ratio:1;max-width:100%}
 .wheel svg{display:block;width:100%;height:100%}
 .wheel .pointer{position:absolute;left:50%;top:-6px;width:0;height:0;margin-left:-14px;border-left:14px solid transparent;border-right:14px solid transparent;border-top:26px solid var(--ink);filter:drop-shadow(0 2px 0 #fff)}
 .stopbtn[hidden],[hidden]{display:none!important}
 .stopbtn{min-width:200px;font-size:20px;padding:16px 36px}
+.who{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border-radius:10px;overflow:hidden;margin:12px 0 16px}
+.who div{background:var(--card);padding:12px 16px;min-width:0}
+.who dt{font-size:14px;color:var(--muted)}
+.who dd{margin:0;font-size:20px;font-weight:900;line-height:1.35}
 .drawsub{margin:-4px 0 0;font-size:17px;font-weight:700;color:var(--orange-deep)}
 .oddsnote{font-size:13px;color:var(--muted);margin:8px 0 0}
 .legend h3{margin:12px 0 2px;font-size:13px;font-weight:700;color:var(--muted)}
@@ -67,9 +71,17 @@ p{margin:0 0 12px}
 /* play */
 .stagewrap{position:relative;border-radius:12px;overflow:hidden;background:#22305F}
 #cv{display:block;width:100%;aspect-ratio:800/360;max-width:100%;touch-action:none;user-select:none;-webkit-user-select:none}
-.alert{position:absolute;left:12px;right:12px;top:12px;background:rgba(179,38,30,.94);color:#fff;font-weight:900;font-size:clamp(15px,3.6vw,19px);text-align:center;padding:10px 12px;border-radius:10px;line-height:1.35}
+.alert{position:absolute;left:12px;right:12px;top:12px;background:rgba(179,38,30,.95);color:#fff;font-weight:900;font-size:clamp(15px,3.6vw,19px);padding:10px 14px;border-radius:12px;line-height:1.35;display:flex;align-items:center;gap:12px;box-shadow:0 0 0 3px #FFD34D,0 8px 24px rgba(0,0,0,.35)}
+.alert>div{flex:1;min-width:0;text-align:left}
+.alert.boom{animation:boom .55s cubic-bezier(.2,1.6,.4,1) both, shake .4s .5s 2}
+.alert .burst{flex:none;width:52px;height:52px;animation:burst .5s ease-in-out infinite alternate}
+@keyframes boom{0%{transform:scale(.4) rotate(-6deg);opacity:0}60%{transform:scale(1.08) rotate(2deg);opacity:1}100%{transform:none}}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes burst{from{transform:scale(.92) rotate(-8deg)}to{transform:scale(1.12) rotate(8deg)}}
+@media (prefers-reduced-motion:reduce){.alert.boom,.alert .burst{animation:none}}
 .alert small{display:block;font-weight:500;font-size:13px;opacity:.9}
-.alert.calm{background:rgba(17,18,34,.88)}
+.alert.calm{background:rgba(17,18,34,.88);box-shadow:none;text-align:center;justify-content:center}
+.alert.calm>div{text-align:center}
 .caption{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-weight:700;font-size:clamp(15px,3.8vw,20px);text-shadow:0 1px 6px rgba(0,0,0,.7);padding:0 16px}
 .skip{position:absolute;right:10px;top:10px;background:rgba(17,18,34,.6);color:#fff;border:0;border-radius:999px;padding:6px 12px;font-size:13px}
 .hud{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:end;margin:14px 0 10px}
@@ -107,9 +119,11 @@ p{margin:0 0 12px}
 .facts li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline}
 .facts b{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--orange);white-space:nowrap}
 .facts small{display:block;color:var(--muted);font-size:12px}
+.facts a,.legend a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.facts a:hover,.legend a:hover{color:var(--orange-deep)}
 .bib{position:relative;background:var(--card);border-radius:8px;overflow:hidden;margin-bottom:20px}
 .pin{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--paper)}
-.bib-top{background:var(--orange);color:#fff;padding:16px 34px 14px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px}
+.bib-top{background:var(--orange);color:#fff;padding:16px 34px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
 .bib-top b{font-weight:900;font-size:clamp(17px,4.6vw,22px);letter-spacing:.03em}
 .bib-top span{font-weight:700;font-size:14px}
 .bib-mid{text-align:center;padding:18px 20px 10px}
@@ -131,15 +145,27 @@ p{margin:0 0 12px}
 .bib-body a.btn{text-decoration:none;justify-self:center;text-align:center}
 .note{font-size:12px;color:var(--muted);margin-top:28px;border-top:1px solid var(--line);padding-top:12px}
 .nw{white-space:nowrap}
+.center{display:flex;justify-content:center}
+.hl{color:#FF5515}
+.copyrow{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
 @media (max-width:480px){
-  body{font-size:16px}
+  /* phone: no running or caption text below 16px */
+  body{font-size:17px}
+  .lead{font-size:17px}
+  .small,.eyebrow,.idnum,.idnote,.oddsnote,.legend,.legend h3,.hudr,.meterrow,.task,.toast,
+  .opt small,.choice .small,.stats dt,.log,.facts small,.note,.bib-top span,.bib-meta dt,.bib-meta dd,
+  .alert small,.skip,.caption,#copyMsg,.who dt{font-size:16px}
+  .eyebrow{letter-spacing:.04em}
+  .alert{font-size:17px}
+  .legend div{gap:8px}
   .facts li{grid-template-columns:1fr;gap:2px}
-  .bib-meta dd{font-size:14px}
-  .bib-body{padding:16px 16px 22px}
-  .bib-body a.btn{width:100%;padding:14px 16px;font-size:16px;line-height:1.4}
+  .facts small{margin-top:2px}
   .stats dd{font-size:20px}
-  .log li{grid-template-columns:46px 1fr;font-size:14px}
-  .lead{font-size:16px}
+  .log li{grid-template-columns:56px 1fr}
+  .bib-body{padding:16px 16px 22px}
+  .bib-body a.btn{display:block;width:100%;padding:14px 16px;font-size:17px;line-height:1.5}
+  .kbd{display:none}
+  .note{line-height:1.7}
 }
 .screen{animation:in .35s ease-out}
 @keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -160,28 +186,42 @@ p{margin:0 0 12px}
       <span class="small">（遊戲需 2 分鐘）</span>
     </div>
     <div class="counter">
-      <span class="small">你打開這一頁之後，全世界的婦女和兒童已經花了</span>
+      <span class="small">打開這頁時，全球脆弱地區的婦女兒童花了</span>
       <b id="hrs">0</b>
       <span class="small">小時在取水。（每天超過 2 億小時，UNICEF）</span>
     </div>
+  </section>
+
+  <!-- WHO: the child you are born as -->
+  <section class="screen" id="s-who" hidden>
+    <div class="eyebrow">你出生了</div>
+    <h2 id="whoTitle">你是……</h2>
+    <dl class="who" id="whoCard">
+      <div><dt>名字</dt><dd id="whoName"></dd></div>
+      <div><dt>性別</dt><dd id="whoSex"></dd></div>
+      <div><dt>住在</dt><dd id="whoPlace"></dd></div>
+      <div><dt>家裡</dt><dd id="whoFam"></dd></div>
+    </dl>
+    <p class="lead" id="whoNote"></p>
+    <p class="small">這裡是台灣世界展望會支持的缺水地區。</p>
+    <div class="center"><button class="btn" id="toWheel" style="margin-top:8px">你家的水，從哪裡來？</button></div>
   </section>
 
   <!-- DRAW -->
   <section class="screen" id="s-draw" hidden>
     <div class="eyebrow" id="drawEyebrow">『命運』轉盤</div>
     <h2 id="drawTitle">你家的水，來自哪裡？</h2>
-    <p class="drawsub" id="drawSub">按「命運」決定</p>
+    <p class="drawsub" id="drawSub">按一下轉盤，讓它停下來</p>
     <div class="wheelbox">
-      <div class="wheel"><svg id="wheel" viewBox="-160 -160 320 320" aria-label="機會轉盤"></svg><div class="pointer"></div></div>
-      <button class="btn stopbtn" id="stop">命運</button>
+      <div class="wheel" id="wheelBtn" role="button" tabindex="0" aria-label="按一下讓命運轉盤停下"><svg id="wheel" viewBox="-160 -160 320 320" aria-hidden="true"></svg><div class="pointer"></div></div>
     </div>
     <div class="legend" id="legend"></div>
     <div class="idcard" id="idcard" hidden>
       <div class="idnum" id="idnum"></div>
-      <p class="idnote">全世界 82 億人，每人都有一個號碼。這是你在全球人口裡隨機抽到的號碼。</p>
+      <p class="idnote">全球共有 82 億人，每人都有一個號碼。<br>這是你在全球人口中隨機抽到的號碼。</p>
       <h2 id="idTitle" style="margin-top:6px"></h2>
       <p id="idDesc"></p>
-      <button class="btn" id="start">出門取水</button>
+      <div class="center"><button class="btn" id="start">出門取水</button></div>
     </div>
   </section>
 
@@ -209,7 +249,6 @@ p{margin:0 0 12px}
 
   <!-- RESULT -->
   <section class="screen" id="s-result" hidden>
-    <div class="eyebrow" id="rEyebrow"></div>
     <h2 id="rTitle"></h2>
     <p id="rText"></p>
     <dl class="stats" id="rStats"></dl>
@@ -217,9 +256,9 @@ p{margin:0 0 12px}
     <ul class="log" id="rLog"></ul>
     <div class="row" style="margin-bottom:28px" id="rBtns"></div>
     <ul class="facts">
-      <li><b>約 22 億</b><span>人沒有安全管理的飲用水，其中 1.06 億人直接喝河流、池塘的水。<small>WHO / UNICEF JMP 2025</small></span></li>
-      <li><b>7 / 10</b><span>家裡沒有自來水的家庭，10 戶有 7 戶由婦女和女孩負責取水。她們在取水路上容易遭到騷擾、暴力和受傷。<small>WHO / UNICEF JMP 2023</small></span></li>
-      <li><b>4.29 億</b><span>學齡兒童在學校喝不到基本供水，其中 2.58 億人的學校完全沒有水。<small>WHO / UNICEF JMP 2026（學校 WASH，2025 年資料）</small></span></li>
+      <li><b>約 22 億</b><span>人沒有安全管理的飲用水，其中 1.06 億人直接喝河流、池塘的水。<small><a href="https://data.unicef.org/resources/jmp-report-2025/" target="_blank" rel="noopener">WHO / UNICEF JMP 2025</a></small></span></li>
+      <li><b>7 / 10</b><span>家裡沒有自來水的家庭，10 戶有 7 戶由婦女和女孩負責取水。她們在取水路上容易遭到騷擾、暴力和受傷。<small><a href="https://washdata.org/report/jmp-2023-wash-households" target="_blank" rel="noopener">WHO / UNICEF JMP 2023</a></small></span></li>
+      <li><b>4.29 億</b><span>學齡兒童在學校喝不到基本供水，其中 2.58 億人的學校完全沒有水。<small><a href="https://data.unicef.org/resources/jmp-wash-in-schools-2026/" target="_blank" rel="noopener">WHO / UNICEF JMP 2026</a></small></span></li>
     </ul>
     <div class="bib">
       <span class="pin" style="left:10px;top:10px"></span><span class="pin" style="right:10px;top:10px"></span>
@@ -245,11 +284,11 @@ p{margin:0 0 12px}
         <a class="btn" id="reg" target="_blank" rel="noopener">立即報名 <span class="nw">2027 Global 6K For Water</span></a>
       </div>
     </div>
-    <div class="row">
+    <div class="copyrow">
       <button class="btn ghost" id="copy">複製我的結果</button>
       <span class="small" id="copyMsg"></span>
     </div>
-    <p class="note">人口比例為 WHO / UNICEF JMP 2025 報告的 2024 年真實數據。路上的野生動物、人身威脅、水質檢驗結果與距離時間，是依 JMP 定義與 UNICEF 報告描述設計的示意情境，不代表特定國家。世界展望會每 10 秒讓一個人取得乾淨水源。</p>
+    <p class="note">孩子的姓名、年齡與家庭人數，是依台灣世界展望會水資源方案地區設計的示意角色。人口比例為 WHO / UNICEF JMP 2025 報告的 2024 年真實數據。路上的野生動物、人身威脅、水質檢驗結果與距離時間，是依 JMP 定義與 UNICEF 報告描述設計的示意情境，不代表特定國家。世界展望會每 10 秒讓一個人取得乾淨水源。</p>
   </section>
 </div>
 
@@ -281,7 +320,7 @@ const LEVELS = [
 ];
 const TOTAL = LEVELS.reduce((a,l)=>a+l.pop,0);
 const $ = id => document.getElementById(id);
-const screens = ['intro','draw','play','result'];
+const screens = ['intro','who','draw','play','result'];
 function show(name){screens.forEach(s=>$('s-'+s).hidden = s!==name); window.scrollTo({top:0});}
 function popText(n){ if(n<1e8) return Math.round(n/1e4)+' 萬人'; let s=(n/1e8).toFixed(n>=1e9?0:2); if(s.includes('.')) s=s.replace(/0+$/,'').replace(/\.$/,''); return s+' 億人'; }
 function hhmm(m){m=Math.round(m)%1440;const h=Math.floor(m/60),mm=m%60;return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
@@ -301,24 +340,27 @@ const LBY=id=>LEVELS.find(l=>l.id===id);
 // the wheel face shows five equal slices; the landing odds come from ODDS, not from slice size
 const WHEEL=ORDER.map((id,i)=>({id,a0:i*72,a1:(i+1)*72}));
 let rot=0, spinRaf=null, spinning=false, stopping=false;
+const WR=150, WP=(deg,r)=>{const t=(deg-90)*Math.PI/180; return [r*Math.cos(t), r*Math.sin(t)];};
 function buildWheel(){
-  const R=150, P=(deg,r)=>{const t=(deg-90)*Math.PI/180; return [r*Math.cos(t), r*Math.sin(t)];};
-  let h='';
-  for(const w of WHEEL){ const l=LBY(w.id), [x0,y0]=P(w.a0,R), [x1,y1]=P(w.a1,R), big=(w.a1-w.a0)>180?1:0;
-    h+=`<path d="M0 0L${x0.toFixed(2)} ${y0.toFixed(2)}A${R} ${R} 0 ${big} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}Z" fill="${l.color}" stroke="#FFFFFF" stroke-width="2"/>`;
-    const mid=(w.a0+w.a1)/2, small=(w.a1-w.a0)<30, [tx,ty]=P(mid, small?118:92), rt=(mid>90&&mid<270)?mid+180:mid;
+  let h='', lab='';
+  for(const w of WHEEL){ const l=LBY(w.id), [x0,y0]=WP(w.a0,WR), [x1,y1]=WP(w.a1,WR);
+    h+=`<path d="M0 0L${x0.toFixed(2)} ${y0.toFixed(2)}A${WR} ${WR} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}Z" fill="${l.color}" stroke="#FFFFFF" stroke-width="2"/>`;
     const dark=['surface','unimproved'].includes(w.id), name=w.id==='safe'?'安全飲用水':l.name;
-    h+=`<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" transform="rotate(${rt} ${tx.toFixed(1)} ${ty.toFixed(1)})" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans TC, Microsoft JhengHei, sans-serif" font-weight="900" font-size="${small?11:15}" fill="${dark?'#FFFFFF':'#111222'}">${name}</text>`;
+    // labels sit outside the rotating group and are re-placed every frame, so the text always stays upright
+    lab+=`<text data-mid="${(w.a0+w.a1)/2}" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans TC, Microsoft JhengHei, sans-serif" font-weight="900" font-size="16" fill="${dark?'#FFFFFF':'#111222'}">${name}</text>`;
   }
-  h+=`<circle r="${R}" fill="none" stroke="#111222" stroke-width="4"/><circle r="22" fill="#FFFFFF" stroke="#111222" stroke-width="4"/><circle r="6" fill="#FF5515"/>`;
-  $('wheel').innerHTML=`<g id="wrot">${h}</g>`;
-  $('legend').innerHTML = '<h3>真實世界水資源使用狀況比例（WHO / UNICEF JMP 2025）</h3>' + LEVELS.map(l=>`<div data-id="${l.id}"><i style="background:${l.color}"></i><span>${l.name}</span><span>${popText(l.pop)}</span><span>${(l.pop/TOTAL*100).toFixed(1)}%</span></div>`).join('');
+  $('wheel').innerHTML=`<g id="wrot">${h}</g><g id="wlab">${lab}</g><circle r="${WR}" fill="none" stroke="#111222" stroke-width="4"/><circle r="22" fill="#FFFFFF" stroke="#111222" stroke-width="4"/><circle r="6" fill="#FF5515"/>`;
+  $('legend').innerHTML = '<h3>真實世界水資源使用狀況比例（<a href="https://data.unicef.org/resources/jmp-report-2025/" target="_blank" rel="noopener">WHO / UNICEF JMP 2025</a>）</h3>' + LEVELS.map(l=>`<div data-id="${l.id}"><i style="background:${l.color}"></i><span>${l.name}</span><span>${popText(l.pop)}</span><span>${(l.pop/TOTAL*100).toFixed(1)}%</span></div>`).join('');
+  setRot();
 }
-function setRot(){ const g=$('wrot'); if(g) g.setAttribute('transform',`rotate(${rot})`); }
+function setRot(){
+  const g=$('wrot'); if(g) g.setAttribute('transform',`rotate(${rot})`);
+  for(const t of document.querySelectorAll('#wlab text')){ const [x,y]=WP(+t.dataset.mid+rot, 96); t.setAttribute('x',x.toFixed(1)); t.setAttribute('y',y.toFixed(1)); }
+}
 function startDraw(){
   cancelAnimationFrame(introRaf); cancelAnimationFrame(spinRaf);
   show('draw');
-  $('idcard').hidden = true; $('stop').hidden=false; $('stop').disabled=false;
+  $('idcard').hidden = true;
   $('drawEyebrow').textContent = '『命運』轉盤';
   $('drawTitle').textContent = '你家的水，來自哪裡？'; $('drawSub').hidden=false;
   buildWheel(); [...$('legend').querySelectorAll('div')].forEach(d=>d.classList.remove('hit'));
@@ -326,32 +368,54 @@ function startDraw(){
   (function spin(now){ if(!spinning) return; const dt=(now-last)/1000; last=now; rot=(rot+dt*520)%360; setRot(); spinRaf=requestAnimationFrame(spin); })(last);
 }
 function stopWheel(){
-  if(!spinning||stopping) return; stopping=true; $('stop').disabled=true;
+  if(!spinning||stopping) return; stopping=true; $('drawSub').textContent='轉盤慢下來了……';
   let r=rnd()*100, acc=0, w=WHEEL[0];
   for(const x of WHEEL){ acc+=ODDS[x.id]; if(r<acc){ w=x; break; } }
-  const target=w.a0+(w.a1-w.a0)*(.2+rnd()*.6);
+  const target=w.a0+(w.a1-w.a0)*(.25+rnd()*.5);
   const base=rot+720, want=(360-target)%360, final=base+((want-base%360)+720)%360;
   spinning=false; cancelAnimationFrame(spinRaf);
   const from=rot, T=matchMedia('(prefers-reduced-motion: reduce)').matches?1:2800, t0=performance.now();
   (function dec(now){ const p=Math.min(1,(now-t0)/T), e=1-Math.pow(1-p,3); rot=from+(final-from)*e; setRot();
     if(p<1) requestAnimationFrame(dec); else { const l=LBY(w.id); level=l; srcKey=l.srcs?l.srcs[Math.floor(rnd()*l.srcs.length)]:null; revealDraw(l); } })(t0);
 }
-$('stop').onclick=stopWheel;
+$('wheelBtn').onclick=stopWheel;
+$('wheelBtn').onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); stopWheel(); } };
 let popNum=0;
 function revealDraw(l){
-  $('stop').hidden=true;
   [...$('legend').querySelectorAll('div')].forEach(d=>d.classList.toggle('hit', d.dataset.id===l.id));
   popNum = Math.floor(rnd()*8.2e9)+1;
-  $('idnum').textContent = '你的人口編號：第 '+popNum.toLocaleString('zh-TW')+' 號 / 共 8,200,000,000 人';
-  $('drawEyebrow').textContent = '轉到了'; $('drawSub').hidden=true;
+  $('idnum').textContent = '你的人口編號：第 '+popNum.toLocaleString('zh-TW')+' 號';
+  $('drawEyebrow').textContent = '轉到了'; $('drawSub').hidden=true; $('drawSub').textContent='按一下轉盤，讓它停下來';
   $('drawTitle').textContent = '你家的水：'+l.name;
-  $('idTitle').textContent = '全世界有 '+popText(l.pop)+'和你一樣';
+  $('idTitle').innerHTML = '全球有 <span class="hl">'+popText(l.pop).replace('人','')+'</span>人<br>和你一樣';
   $('idDesc').textContent = l.id==='safe' ? '水就在家裡，需要時就有，也沒有受到汙染。今天早上，你只要走到廚房。' : l.desc + ' 你家最近的水源是「'+SRC[srcKey].name+'」。';
   $('start').textContent = l.id==='safe' ? '打開水龍頭' : '出門取水';
   $('idcard').hidden = false;
   $('idcard').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-$('go').onclick = startDraw;
+/* ---------- WHO: five example children from WVT-supported water programme areas ---------- */
+const KIDS=[
+  {name:'阿米娜塔',g:'f',age:10,country:'馬利',area:'傑凱巴哈',region:'非洲',fam:9,note:'村子裡只有傳統水井。你要走很遠的路去取水，到了還要排很久的隊。'},
+  {name:'奇孔迪',g:'m',age:9,country:'馬拉威',area:'坎培薩',region:'非洲',fam:6,note:'家裡沒有自來水。天還沒亮，你就要提著空桶出門。'},
+  {name:'法圖瑪',g:'f',age:12,country:'尼日',area:'塔瓦',region:'非洲',fam:8,note:'這裡還在人道救援和重建中，乾淨的水很難取得。'},
+  {name:'丁恩',g:'m',age:11,country:'南蘇丹',area:'朱巴曼加拉聚落',region:'非洲',fam:7,note:'你們一家逃離家鄉，現在住在安置聚落裡，每天都要出去找水。'},
+  {name:'梅倫',g:'f',age:8,country:'衣索比亞',area:'奇勒加',region:'非洲',fam:5,note:'你是家裡最大的女孩，提水回家是你每天早上的工作。'}
+];
+let kid=KIDS[0];
+function startWho(){
+  cancelAnimationFrame(introRaf);
+  show('who');
+  kid=KIDS[Math.floor(rnd()*KIDS.length)];
+  const card=$('whoCard'), btn=$('toWheel'); btn.hidden=true; $('whoNote').textContent='';
+  const fill=k=>{ $('whoTitle').textContent='你是 '+k.age+' 歲、在'+k.country+'的孩子';
+    $('whoName').textContent=k.name; $('whoSex').textContent=k.g==='f'?'女孩':'男孩';
+    $('whoPlace').innerHTML='<span class="nw">'+k.country+'</span> <span class="nw">'+k.area+'</span><span class="nw">（'+k.region+'）</span>'; $('whoFam').textContent=k.fam+' 個人'; };
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches; let n=reduce?0:12;
+  (function shuffle(){ if(n-->0){ fill(KIDS[Math.floor(rnd()*KIDS.length)]); setTimeout(shuffle,70+ (12-n)*12); }
+    else { fill(kid); $('whoNote').textContent=kid.note; btn.hidden=false; } })();
+}
+$('go').onclick = startWho;
+$('toWheel').onclick = startDraw;
 $('start').onclick = ()=> level.id==='safe' ? finishSafe() : startPlay();
 
 /* ---------- SCENE ---------- */
@@ -510,11 +574,18 @@ function drawWalker(t){
   // legs
   ctx.strokeStyle=skin; ctx.lineWidth=4; ctx.lineCap='round';
   ctx.beginPath(); ctx.moveTo(0,-26); ctx.lineTo(Math.sin(sw)*16,0); ctx.moveTo(0,-26); ctx.lineTo(-Math.sin(sw)*16,0); ctx.stroke();
-  // dress
-  ctx.fillStyle=dress; ctx.beginPath(); ctx.moveTo(-7,-56); ctx.lineTo(7,-56); ctx.lineTo(12,-24); ctx.lineTo(-12,-24); ctx.closePath(); ctx.fill();
-  // head + scarf
-  ctx.fillStyle=skin; ctx.beginPath(); ctx.arc(1,-63,6.5,0,7); ctx.fill();
-  ctx.fillStyle=scarf; ctx.beginPath(); ctx.arc(0,-65,7,Math.PI*1.05,Math.PI*2.1); ctx.fill();
+  if(kid.g==='f'){
+    // dress + headscarf
+    ctx.fillStyle=dress; ctx.beginPath(); ctx.moveTo(-7,-56); ctx.lineTo(7,-56); ctx.lineTo(12,-24); ctx.lineTo(-12,-24); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=skin; ctx.beginPath(); ctx.arc(1,-63,6.5,0,7); ctx.fill();
+    ctx.fillStyle=scarf; ctx.beginPath(); ctx.arc(0,-65,7,Math.PI*1.05,Math.PI*2.1); ctx.fill();
+  } else {
+    // shirt + shorts, short hair
+    ctx.fillStyle=C([62,110,158],[18,24,36]); ctx.fillRect(-7,-56,14,22);
+    ctx.fillStyle=C([60,52,48],[16,14,14]); ctx.fillRect(-8,-35,16,9);
+    ctx.fillStyle=skin; ctx.beginPath(); ctx.arc(1,-63,6.5,0,7); ctx.fill();
+    ctx.fillStyle=C([30,24,22],[8,8,10]); ctx.beginPath(); ctx.arc(1,-64,6.8,Math.PI,Math.PI*2); ctx.fill();
+  }
   // arms + jerrycan
   ctx.strokeStyle=skin; ctx.lineWidth=3.5;
   if(back && S.liters>0){
@@ -578,7 +649,7 @@ function walkTaskHtml(back){
 function toast(t){ $('toast').textContent=t; clearTimeout(toast.h); toast.h=setTimeout(()=>$('toast').textContent='',2600); }
 function logp(txt){ S.log.push([S.clock,txt]); }
 function holdButton(label){
-  $('controls').innerHTML=`<button class="btn hold" id="holdBtn">${label}</button><p class="small" style="margin-top:8px">也可以按住空白鍵。放開就停下來休息。</p>`;
+  $('controls').innerHTML=`<button class="btn hold" id="holdBtn">${label}</button><p class="small" style="margin-top:8px"><span class="kbd">也可以按住空白鍵。</span>放開按鈕就停下來休息。</p>`;
   const b=$('holdBtn');
   const on=e=>{e.preventDefault();S.holding=true;b.classList.add('on');};
   const off=()=>{S.holding=false;b.classList.remove('on');};
@@ -588,7 +659,9 @@ function holdButton(label){
 }
 addEventListener('keydown',e=>{ if(e.code==='Space' && /out|back/.test(S.phase||'')){ e.preventDefault(); S.holding=true; $('holdBtn')&&$('holdBtn').classList.add('on'); }});
 addEventListener('keyup',e=>{ if(e.code==='Space'){ S.holding=false; $('holdBtn')&&$('holdBtn').classList.remove('on'); }});
-function showAlert(html,calm){ const a=$('alert'); a.innerHTML=html; a.classList.toggle('calm',!!calm); a.hidden=false; }
+const BURST='<svg class="burst" viewBox="-50 -50 100 100" aria-hidden="true"><polygon fill="#FFD34D" stroke="#111222" stroke-width="3" points="'+Array.from({length:24},(_,i)=>{const r=i%2?24:48,a=i*Math.PI/12;return (r*Math.cos(a)).toFixed(1)+','+(r*Math.sin(a)).toFixed(1);}).join(' ')+'"/><polygon fill="#FF5515" points="'+Array.from({length:16},(_,i)=>{const r=i%2?12:28,a=i*Math.PI/8+.2;return (r*Math.cos(a)).toFixed(1)+','+(r*Math.sin(a)).toFixed(1);}).join(' ')+'"/><text y="9" text-anchor="middle" font-size="30" font-weight="900" fill="#FFFFFF" font-family="sans-serif">!</text></svg>';
+function showAlert(html,calm){ const a=$('alert'); a.innerHTML=(calm?'':BURST)+'<div>'+html+'</div>'; a.classList.toggle('calm',!!calm);
+  a.classList.remove('boom'); void a.offsetWidth; if(!calm) a.classList.add('boom'); a.hidden=false; }
 function hideAlert(){ $('alert').hidden=true; }
 
 function startPlay(){
@@ -684,7 +757,7 @@ function choice(title,text,opts,cb){
 }
 function violenceEvent(){
   choice('路口有幾個奇怪的人盯著你看',
-    '取水的路上，婦女和女孩常遇到騷擾、搶奪和暴力威脅。你手上提著全家今天要用的水。',
+    (kid.g==='f'?'取水的路上，婦女和女孩常遇到騷擾、搶奪和暴力威脅。':'取水的路上，孩子常遇到搶奪和暴力威脅。')+'你手上提著全家今天要用的水。',
     [{label:'繞遠路',sub:'多走一段，+20 分鐘，更累',k:'detour'},
      {label:'躲在樹後，等其他取水的人一起走',sub:'+15 分鐘',k:'wait'},
      {label:'低頭快步走過去',sub:'不知道會發生什麼',k:'go'}],
@@ -778,7 +851,6 @@ function finish(){
   $('skip').hidden=true; $('caption').hidden=true;
   const l=level, mins=S.homeClock-300, late=S.homeClock-450;
   show('result');
-  $('rEyebrow').textContent = l.name+' · '+SRC[srcKey].name+' · '+popText(l.pop)+'中的 1 人';
   $('rTitle').innerHTML= '你花了 <span class="nw">'+dur(mins)+'</span>，'+(S.emptyHome ? '空手回家。' : '帶回 <span class="nw">'+Math.round(S.liters)+' 公升</span>。');
   let q;
   const sick=' 家裡的弟妹已經腹瀉好幾天，最小的妹妹上個月就是因為喝了髒水過世。';
@@ -801,7 +873,7 @@ function finish(){
   $('rStats').innerHTML = st.map(s=>`<div><dt>${s[0]}</dt><dd class="${s[2]?'txt':''}">${s[1]}</dd></div>`).join('');
   $('rLog').innerHTML = S.log.map(x=>`<li><time>${hhmm(x[0])}</time><span>${x[1]}</span></li>`).join('');
   $('rBtns').innerHTML = '<button class="btn" id="again">再出生一次</button>';
-  $('again').onclick=startDraw;
+  $('again').onclick=startWho;
   S.shareText = '我在「80億分之1・取水版」抽到「'+l.name+'」，走到'+SRC[srcKey].name+'取水，總共走了 '+S.dist.toFixed(1)+' 公里、花了 '+dur(mins)+'，'+(S.emptyHome?'最後空手回家':'帶回 '+Math.round(S.liters)+' 公升')
     +((S.attacked||S.threat)?'，路上'+[S.attacked,S.threat].filter(Boolean).join('、'):'')+(S.emptyHome?'，累到沒去上學':late>0?'，上學遲到 '+dur(late):'')+'。全世界有 '+popText(l.pop)+'過著這樣的早上。';
   $('copyMsg').textContent='';
@@ -809,7 +881,6 @@ function finish(){
 function finishSafe(){
   show('result');
   const l=level;
-  $('rEyebrow').textContent = l.name+' · 自來水 · '+popText(l.pop)+'中的 1 人';
   $('rTitle').textContent='1 分鐘，20 公升。';
   $('rText').textContent='水就在家裡，打開水龍頭就有。你不用天黑出門，不用排隊，路上也沒有鬣狗、蛇和盯著你的人，吃完早餐準時到學校。轉盤上這一格只有 5%，真實世界裡 74% 的人過著這樣的早上；另外約 22 億人，每天天亮前就要走出家門找水。';
   $('rStats').innerHTML=[['花費時間','1 分鐘'],['帶回 / 灑掉','20 / 0 公升'],['路上安全','不用出門',1],['到校','準時',1]]
