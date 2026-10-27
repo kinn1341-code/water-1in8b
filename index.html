@@ -134,13 +134,14 @@ p{margin:0 0 12px}
 .bib-art img{display:block;width:100%;height:auto}
 .bib-line{font-size:16px;font-weight:700;margin:8px 0 0;text-wrap:balance}
 .bib-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:2px dashed var(--line);margin-top:14px}
-.bib-meta div{padding:10px 8px;text-align:center;min-width:0}
+.bib-meta div{padding:10px 8px;text-align:center;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .bib-meta div{border-top:2px dashed var(--line)}
 .bib-meta div:nth-child(even){border-left:2px dashed var(--line)}
 .bib-meta dt{font-size:12px;color:var(--muted)}
 .bib-meta dd{margin:0;font-weight:900;font-size:clamp(14px,3.8vw,18px)}
 .bib-body{padding:18px 22px 24px;display:grid;gap:12px}
 .bib-body p{margin:0}
+.bib-body .bib-close{text-align:center;color:#FF5515;font-weight:700}
 .bib-body ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
 .bib-body li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
 .bib-body li i{font-style:normal;width:28px;height:28px;border-radius:50%;background:#FFEBE1;color:var(--orange-deep);font-weight:900;display:grid;place-items:center;font-size:14px}
@@ -257,7 +258,7 @@ p{margin:0 0 12px}
     <div class="row" style="margin-bottom:28px" id="rBtns"></div>
     <ul class="facts">
       <li><b>約 22 億</b><span>人沒有安全管理的飲用水，其中 1.06 億人直接喝河流、池塘的水。<small><a href="https://data.unicef.org/resources/jmp-report-2025/" target="_blank" rel="noopener">WHO / UNICEF JMP 2025</a></small></span></li>
-      <li><b>7 / 10</b><span>家裡沒有自來水的家庭，多半由婦女和女孩負責取水。她們在取水路上容易遭到騷擾、暴力和受傷。<small><a href="https://washdata.org/report/jmp-2023-wash-households" target="_blank" rel="noopener">WHO / UNICEF JMP 2023</a></small></span></li>
+      <li><b>1,000 名</b><span>5 歲以下兒童，每天因為不安全的水和衛生環境而死亡。<small><a href="https://www.unicef.org/press-releases/triple-threat-water-related-crises-endangering-lives-190-million-children-unicef" target="_blank" rel="noopener">UNICEF《Triple Threat》</a></small></span></li>
       <li><b>4.29 億</b><span>學齡兒童在學校喝不到基本供水，其中 2.58 億人的學校完全沒有水。<small><a href="https://data.unicef.org/resources/jmp-wash-in-schools-2026/" target="_blank" rel="noopener">WHO / UNICEF JMP 2026</a></small></span></li>
     </ul>
     <div class="bib">
@@ -274,13 +275,13 @@ p{margin:0 0 12px}
         </dl>
       </div>
       <div class="bib-body">
-        <p>很多脆弱地區的孩子每天走遠路，只為取回沉重又混濁的水，更因此失去上學機會。加入6K公益路跑的行列，您的報名費將轉化為長遠的改變：</p>
+        <p>很多脆弱地區的孩子每天走遠路，只能取回沉重又混濁的水，不但健康受影響，不少孩子更失去上學機會，衝擊生存權與受教權。邀請您加入6K公益路跑的行列，將路跑報名費轉化為長遠的改變：</p>
         <ul>
           <li><i>1</i><span><b>興建供水設備：</b>因地制宜鑿井、建水塔或太陽能幫浦井，縮短取水距離。</span></li>
           <li><i>2</i><span><b>改善衛生環境：</b>在家庭與學校增建廁所及洗手台，守護學童健康。</span></li>
           <li><i>3</i><span><b>培力在地管理：</b>協助成立水資源管理委員會，負責維護，確保設施永續運作。</span></li>
         </ul>
-        <p>水源近了，孩子就能放下水桶、重返課堂。邀請您為他們的未來邁出這一步。</p>
+        <p class="bib-close"><span class="nw">水源近了，</span><span class="nw">孩子就能放下水桶、重返課堂。</span><br><span class="nw">邀請您為他們的未來</span><span class="nw">邁出這一步。</span></p>
         <a class="btn" id="reg" target="_blank" rel="noopener">立即報名 <span class="nw">2027 Global 6K For Water</span></a>
       </div>
     </div>
