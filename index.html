@@ -557,44 +557,77 @@ function drawHazard(t){
     ctx.strokeStyle=C([96,86,40],[20,20,16]); ctx.lineWidth=4; ctx.lineCap='round'; ctx.beginPath();
     for(let i=0;i<=20;i++){const sx=x+i*2.6, sy=GY+4-Math.sin(i*.6+t*5)*4-(i>16?(i-16)*3:0); i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);} ctx.stroke();
   } else if(hz.kind==='men'){
-    for(let i=0;i<3;i++) person(x+i*22, GY-2, 1.05, C([58,52,56],[10,10,14]));
+    for(let i=0;i<3;i++){ ctx.save(); ctx.translate(x+i*26, GY-2); ctx.scale(1.05,1.05);
+      drawToon({adult:true, dir:-1, top:[70,66,78], bottom:[44,40,48], skin:[86,62,50], hair:'short', faceless:true}); ctx.restore();
+      ctx.fillStyle='rgba(255,236,150,.9)'; ctx.fillRect(x+i*26-5,GY-2-67*1.05,2.4,2); ctx.fillRect(x+i*26+1,GY-2-67*1.05,2.4,2); }
   } else if(hz.kind==='croc'){
     ctx.fillStyle=C([62,72,48],[14,16,14]); const cx=x+Math.sin(t*0.8)*6;
     ctx.beginPath(); ctx.ellipse(cx,GY+16,52,5,0,0,7); ctx.fill(); ctx.beginPath(); ctx.arc(cx-36,GY+11,3,0,7); ctx.arc(cx-26,GY+11,3,0,7); ctx.fill();
   }
 }
+/* Flat, round-headed cartoon people (big head, round eyes, rosy cheeks). Feet at (0,0). */
+function drawToon(o){
+  const sw=o.sw||0, adult=!!o.adult, legL=adult?24:17, torso=adult?30:24, hr=adult?13:15.5;
+  const hipY=-legL, shY=hipY-torso, hy=shY-hr+3;
+  const skin=C(o.skin||[124,82,56],[34,28,30]), hair=C([34,26,26],[10,10,12]);
+  const top=C(o.top,[30,30,40]), bottom=C(o.bottom||[52,48,60],[14,14,18]), shoe=C([58,44,40],[12,12,14]);
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  // legs + shoes
+  for(const k of [-1,1]){ const fx=Math.sin(sw)*12*k;
+    ctx.strokeStyle=skin; ctx.lineWidth=adult?6:6.5; ctx.beginPath(); ctx.moveTo(k*4,hipY); ctx.lineTo(k*4+fx,-3); ctx.stroke();
+    ctx.fillStyle=shoe; ctx.beginPath(); ctx.ellipse(k*4+fx+2*(o.dir||1),-2,5,3,0,0,7); ctx.fill(); }
+  // body
+  if(o.dress){ ctx.fillStyle=top; ctx.beginPath(); ctx.moveTo(-8,shY+2); ctx.quadraticCurveTo(0,shY-3,8,shY+2); ctx.lineTo(13,hipY+5); ctx.quadraticCurveTo(0,hipY+9,-13,hipY+5); ctx.closePath(); ctx.fill(); }
+  else { ctx.fillStyle=bottom; ctx.beginPath(); ctx.roundRect(-9,hipY-7,18,10,3); ctx.fill();
+    ctx.fillStyle=top; ctx.beginPath(); ctx.roundRect(-9.5,shY,19,torso-5,6); ctx.fill(); }
+  // back arm (behind) is drawn by caller-specific pose; front arm here unless caller handles it
+  if(o.arms!==false){ ctx.strokeStyle=skin; ctx.lineWidth=5;
+    ctx.beginPath(); ctx.moveTo(-7,shY+5); ctx.lineTo(-10-Math.sin(sw)*6,shY+20); ctx.moveTo(7,shY+5); ctx.lineTo(10+Math.sin(sw)*6,shY+20); ctx.stroke(); }
+  // head
+  ctx.fillStyle=skin; ctx.beginPath(); ctx.arc(0,hy,hr,0,7); ctx.fill();
+  ctx.fillStyle=hair;
+  if(o.hair==='buns'){ ctx.beginPath(); ctx.arc(0,hy-2,hr+.5,Math.PI*1.02,Math.PI*1.98); ctx.fill(); ctx.beginPath(); ctx.arc(-hr*.72,hy-hr*.85,6.5,0,7); ctx.arc(hr*.72,hy-hr*.85,6.5,0,7); ctx.fill(); }
+  else if(o.hair==='curly'){ for(let k=-4;k<=4;k++){ ctx.beginPath(); ctx.arc(k*3.4,hy-hr+2-Math.abs(k)*.2+(Math.abs(k)>3?4:0),4.6,0,7); ctx.fill(); } }
+  else if(o.hair==='short'){ ctx.beginPath(); ctx.arc(0,hy-1,hr+.5,Math.PI*1.05,Math.PI*1.95); ctx.fill(); }
+  if(o.faceless){ return; }
+  // face (dir: 1 = facing right)
+  const d=o.dir||1, ex=3*d, ey=hy+1, mood=o.mood||'ok';
+  const eye=(cx)=>{ if(mood==='hurt'){ ctx.strokeStyle='#111222'; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(cx-2.5,ey-2); ctx.lineTo(cx+2,ey); ctx.lineTo(cx-2.5,ey+2); ctx.stroke(); return; }
+    const r=mood==='scared'?4.6:3.9; ctx.fillStyle='#FFFFFF'; ctx.beginPath(); ctx.arc(cx,ey,r,0,7); ctx.fill();
+    ctx.fillStyle='#111222'; ctx.beginPath(); ctx.arc(cx+1.1*d,ey+.3,r*.55,0,7); ctx.fill();
+    if(mood==='tired'){ ctx.fillStyle=skin; ctx.beginPath(); ctx.rect(cx-r-1,ey-r-1,2*r+2,r+.6); ctx.fill(); ctx.strokeStyle='#111222'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(cx-r,ey-.4); ctx.lineTo(cx+r,ey-.4); ctx.stroke(); } };
+  eye(ex-5); eye(ex+5);
+  ctx.fillStyle='rgba(255,120,110,.55)'; ctx.beginPath(); ctx.ellipse(ex-10,ey+6,3.2,2,0,0,7); ctx.ellipse(ex+10,ey+6,3.2,2,0,0,7); ctx.fill();
+  ctx.strokeStyle='#111222'; ctx.fillStyle='#111222'; ctx.lineWidth=1.5;
+  if(mood==='scared'){ ctx.beginPath(); ctx.ellipse(ex+.5,ey+8,2.2,2.8,0,0,7); ctx.fill(); }
+  else if(mood==='tired'||mood==='hurt'){ ctx.beginPath(); ctx.moveTo(ex-3,ey+9); ctx.quadraticCurveTo(ex,ey+7,ex+3,ey+9); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.arc(ex,ey+6,3,0.15*Math.PI,0.85*Math.PI); ctx.stroke(); }
+  if(mood==='tired'){ ctx.fillStyle='#8FD3F4'; ctx.beginPath(); ctx.moveTo(ex+12*d,hy-hr+4); ctx.quadraticCurveTo(ex+16*d,hy-hr+10,ex+12*d,hy-hr+11); ctx.quadraticCurveTo(ex+8*d,hy-hr+10,ex+12*d,hy-hr+4); ctx.fill(); }
+}
 function drawWalker(t){
   const x=px(S.wx), moving=S.holding&&/out|back/.test(S.phase)&&S.stun<=0&&!S.frozen;
-  const ph=moving? t*9 : 0, sw=Math.sin(ph)*0.45, fallen=S.stun>0;
-  const skin=C([104,66,46],[24,20,22]), dress=C([232,82,30],[44,22,18]), scarf=C([40,44,82],[12,12,18]);
+  const ph=moving? t*9 : 0, sw=Math.sin(ph)*0.5, fallen=S.stun>0;
+  const back=S.phase==='back'||S.phase==='dusk'||(S.phase==='event'&&S.legBack), dir=back?-1:1;
   // shadow from sun
-  if(LIGHT>0.4){ const dir=clamp((S.sun.sx-x)/400,-1,1); ctx.fillStyle=`rgba(0,0,0,${0.18*LIGHT})`; ctx.beginPath(); ctx.ellipse(x-dir*26,GY+2,26,4,0,0,7); ctx.fill(); }
+  if(LIGHT>0.4){ const sd=clamp((S.sun.sx-x)/400,-1,1); ctx.fillStyle=`rgba(0,0,0,${0.18*LIGHT})`; ctx.beginPath(); ctx.ellipse(x-sd*26,GY+2,24,4,0,0,7); ctx.fill(); }
   ctx.save(); ctx.translate(x,GY);
-  if(fallen){ ctx.rotate(1.3); ctx.translate(-10,-6); }
-  const back=S.phase==='back'||S.phase==='dusk';
-  // legs
-  ctx.strokeStyle=skin; ctx.lineWidth=4; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(0,-26); ctx.lineTo(Math.sin(sw)*16,0); ctx.moveTo(0,-26); ctx.lineTo(-Math.sin(sw)*16,0); ctx.stroke();
-  if(kid.g==='f'){
-    // dress + headscarf
-    ctx.fillStyle=dress; ctx.beginPath(); ctx.moveTo(-7,-56); ctx.lineTo(7,-56); ctx.lineTo(12,-24); ctx.lineTo(-12,-24); ctx.closePath(); ctx.fill();
-    ctx.fillStyle=skin; ctx.beginPath(); ctx.arc(1,-63,6.5,0,7); ctx.fill();
-    ctx.fillStyle=scarf; ctx.beginPath(); ctx.arc(0,-65,7,Math.PI*1.05,Math.PI*2.1); ctx.fill();
+  if(fallen){ ctx.rotate(1.25*dir); ctx.translate(-8*dir,-4); }
+  const mood = fallen ? 'hurt' : (S.react||$('alert').hidden===false&&!$('alert').classList.contains('calm')) ? 'scared' : S.stamina<.3 ? 'tired' : 'ok';
+  const girl=kid.g==='f';
+  const look={sw, dir, mood, dress:girl, top: girl?[236,108,84]:[122,176,146], bottom:[56,52,66], hair: girl?'buns':'curly', arms:false};
+  const skin=C([124,82,56],[34,28,30]);
+  const carryHead = back && S.liters>0;
+  drawToon(look);
+  // arms + jerrycan, drawn last so they sit in front
+  const shY=-17-24; ctx.strokeStyle=skin; ctx.lineWidth=5; ctx.lineCap='round';
+  if(carryHead){
+    jerry(-11,-96,1.35);
+    ctx.beginPath(); ctx.moveTo(-7,shY+5); ctx.lineTo(-11,-72); ctx.moveTo(7,shY+5); ctx.lineTo(11,-72); ctx.stroke();
   } else {
-    // shirt + shorts, short hair
-    ctx.fillStyle=C([62,110,158],[18,24,36]); ctx.fillRect(-7,-56,14,22);
-    ctx.fillStyle=C([60,52,48],[16,14,14]); ctx.fillRect(-8,-35,16,9);
-    ctx.fillStyle=skin; ctx.beginPath(); ctx.arc(1,-63,6.5,0,7); ctx.fill();
-    ctx.fillStyle=C([30,24,22],[8,8,10]); ctx.beginPath(); ctx.arc(1,-64,6.8,Math.PI,Math.PI*2); ctx.fill();
-  }
-  // arms + jerrycan
-  ctx.strokeStyle=skin; ctx.lineWidth=3.5;
-  if(back && S.liters>0){
-    ctx.beginPath(); ctx.moveTo(-4,-52); ctx.lineTo(-8,-74); ctx.moveTo(5,-52); ctx.lineTo(8,-74); ctx.stroke();
-    jerry(-9,-92,1.1);
-  } else {
-    ctx.beginPath(); ctx.moveTo(0,-52); ctx.lineTo(8+Math.sin(sw)*6,-34); ctx.stroke();
-    ctx.save(); ctx.translate(6+Math.sin(sw)*6,-34); ctx.rotate(Math.sin(sw)*0.2); jerry(0,0,0.9); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(-7*dir,shY+5); ctx.lineTo(-10*dir-Math.sin(sw)*6,shY+20); ctx.stroke();
+    const hx=11*dir+Math.sin(sw)*5, hy=shY+21;
+    ctx.save(); ctx.translate(hx-(dir<0?14:0),hy); ctx.rotate(Math.sin(sw)*0.15); jerry(0,0,1.0); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(7*dir,shY+5); ctx.lineTo(hx,hy+1); ctx.stroke();
   }
   ctx.restore();
 }
@@ -619,7 +652,9 @@ function render(now){
   // village
   hut(px(WORLD.home)-60, 286, .8); hut(px(WORLD.home)+30, GY-6, 1); hut(px(WORLD.home)-130, GY-2, .9);
   drawSource(t);
-  if(S.queue){ for(let i=0;i<S.queue;i++){ const qx=px(WORLD.src)-60-i*20; person(qx,GY-2,.85,C([84,60,52],[16,14,16])); jerry(qx+4,GY-18,.7);} }
+  if(S.queue){ const tops=[[124,176,186],[236,196,92],[122,176,146],[236,108,84],[170,140,200]];
+    for(let i=0;i<S.queue;i++){ const qx=px(WORLD.src)+46+i*26; ctx.save(); ctx.translate(qx,GY-2); ctx.scale(.82,.82);
+      drawToon({dir:1, dress:i%2===0, top:tops[i%tops.length], hair:i%2?'curly':'buns', mood:i%3===0?'tired':'ok'}); ctx.restore(); jerry(qx+8,GY-16,.7);} }
   drawHazard(t);
   drawWalker(t);
   // foreground grass
@@ -667,7 +702,7 @@ function hideAlert(){ $('alert').hidden=true; }
 
 function startPlay(){
   buildWorld();
-  Object.assign(S,{phase:'out',pos:0,wx:WORLD.home,stamina:1,liters:0,clock:300,spilled:0,falls:0,attacked:'',threat:'',injured:false,
+  Object.assign(S,{legBack:false,phase:'out',pos:0,wx:WORLD.home,stamina:1,liters:0,clock:300,spilled:0,falls:0,attacked:'',threat:'',injured:false,
     unsafe:!level.improved, contaminated:false, holding:false, stun:0, fillT:0, frozen:false, queue:0, log:[], outHz:null, backHz:null, hazard:null, dist:0, trips:1, emptyHome:false});
   // hazards: wildlife on the way out, a person-threat on the way back
   S.outHz={kind: rnd()<.5 ? 'dogs':'snake', at:.48+rnd()*.12, done:false};
@@ -721,7 +756,7 @@ function walkStep(dt){
   const prog = back? 1-S.pos : S.pos;
   if(hz && !hz.done){
     const hx = WORLD.home + (back? (1-hz.at) : hz.at)*(WORLD.stop-WORLD.home);
-    if(hz.kind!=='snake' && Math.abs(hx-S.wx)<500) S.hazard={kind:hz.kind,x:hx+(back?-70:70),visible:true};
+    if(hz.kind!=='snake' && Math.abs(hx-S.wx)<500) S.hazard={kind:hz.kind,x:hx+(back?-130:70),visible:true};
     if(prog>=hz.at){ hz.done=true; triggerHazard(hz, hx); }
   }
   if(!back && S.pos>=1){ S.holding=false; arriveSource(); }
@@ -777,7 +812,7 @@ function emptyEvent(){
     ? [{label:'回頭再去取一次',sub:'再走一趟，上學會更晚',k:'again'},{label:'沒力氣了，空手回家',sub:'今天家裡沒有水',k:'home'}]
     : [{label:'空手回家',sub:'你已經沒有力氣再走一趟',k:'home'}];
   choice('水桶空了', canGo?'一路跌倒、灑水，桶子裡的 20 公升全沒了。家裡還在等這桶水。':'第二桶水也灑光了。你的腿在發抖，手也提不動了。', opts, o=>{
-    if(o.k==='again'){ S.trips++; S.phase='out'; S.stamina=Math.max(S.stamina,.4); logp('水全灑光了，回頭再去取一次');
+    if(o.k==='again'){ S.trips++; S.phase='out'; S.legBack=false; S.stamina=Math.max(S.stamina,.4); logp('水全灑光了，回頭再去取一次');
       setTask('<b>回頭走向水源。</b>同一段路，再走一次。'); holdButton('按住 回水源'); }
     else { S.emptyHome=true; logp('水全灑光了，沒力氣再取，空手走回家');
       setTask('<b>空手走回家。</b>腿很痛，走得很慢。'); holdButton('按住 回家'); }
@@ -815,7 +850,7 @@ function beginFill(cap,note){ S.queue=0; S.phase='fill'; S.fillT=0; S.fillCap=ca
 function startBack(){
   // even an improved source can give dirty water: jerrycan, storage, broken pipes
   if(!S.unsafe && rnd()<.3) S.contaminated=true;
-  S.phase='back';
+  S.phase='back'; S.legBack=true;
   setTask(walkTaskHtml(true));
   holdButton('按住 回家');
 }
