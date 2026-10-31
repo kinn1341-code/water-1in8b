@@ -118,7 +118,8 @@ p{margin:0 0 12px}
 .log li{display:grid;grid-template-columns:52px 1fr;gap:10px}
 .log time{font-family:var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
 .facts{list-style:none;padding:0;margin:0 0 24px;display:grid;gap:14px}
-.facts li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline}
+.facts li{display:grid;grid-template-columns:108px 1fr;gap:14px;align-items:baseline}
+.facts li b{white-space:nowrap}
 .facts b{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--orange);white-space:nowrap}
 .facts small{display:block;color:var(--muted);font-size:12px}
 .counter a,.facts a,.legend a{color:inherit;text-decoration:underline;text-underline-offset:3px}
@@ -255,7 +256,7 @@ p{margin:0 0 12px}
     <dl class="stats" id="rStats"></dl>
     <div class="eyebrow" style="margin-bottom:8px">今天早上</div>
     <ul class="log" id="rLog"></ul>
-    <div class="row" style="margin-bottom:28px" id="rBtns"></div>
+    <div class="row" style="margin-bottom:28px;justify-content:center" id="rBtns"></div>
     <ul class="facts">
       <li><b>約 22 億</b><span>人沒有安全管理的飲用水，其中 1.06 億人直接喝河流、池塘的水。<small><a href="https://data.unicef.org/resources/jmp-report-2025/" target="_blank" rel="noopener">WHO / UNICEF JMP 2025</a></small></span></li>
       <li><b>1,000 名</b><span>5 歲以下兒童，每天因為不安全的水和衛生環境而死亡。<small><a href="https://www.unicef.org/press-releases/triple-threat-water-related-crises-endangering-lives-190-million-children-unicef" target="_blank" rel="noopener">UNICEF《Triple Threat》</a></small></span></li>
@@ -281,7 +282,7 @@ p{margin:0 0 12px}
           <li><i>2</i><span><b>改善衛生環境：</b>在家庭與學校增建廁所及洗手台，守護學童健康。</span></li>
           <li><i>3</i><span><b>培力在地管理：</b>協助成立水資源管理委員會，負責維護，確保設施永續運作。</span></li>
         </ul>
-        <p class="bib-close"><span class="nw">水源近了，</span><span class="nw">孩子就能放下水桶、重返課堂。</span><br><span class="nw">邀請您為他們的未來</span><span class="nw">邁出這一步。</span></p>
+        <p class="bib-close"><span class="nw">水源近了，</span><span class="nw">孩子就能放下水桶、重返課堂</span><br><span class="nw">邀請您為他們的未來</span><span class="nw">邁出這一步</span></p>
         <a class="btn" id="reg" target="_blank" rel="noopener">立即報名 <span class="nw">2027 Global 6K For Water</span></a>
       </div>
     </div>
@@ -796,8 +797,11 @@ function startPlay(){
   Object.assign(S,{legBack:false,phase:'out',pos:0,wx:WORLD.home,stamina:1,liters:0,clock:300,spilled:0,falls:0,attacked:'',threat:'',injured:false,
     unsafe:!level.improved, contaminated:false, holding:false, stun:0, fillT:0, frozen:false, queue:0, log:[], outHz:null, backHz:null, hazard:null, dist:0, trips:1, emptyHome:false});
   // hazards: wildlife on the way out, a person-threat on the way back
-  S.outHz={kind: rnd()<.5 ? 'dogs':'snake', at:.48+rnd()*.12, done:false};
-  S.backHz={kind:'men', at:.4+rnd()*.15, done:false};
+  const first = rnd()<.5 ? 'dogs':'snake';
+  S.outHz=[{kind:first, at:.48+rnd()*.12, done:false}];
+  // every trip meets at least one snake: if the way out had dogs, a snake waits on the way home
+  S.backHz=(first==='dogs'?[{kind:'snake', at:.16+rnd()*.08, done:false}]:[]).concat([{kind:'men', at:.42+rnd()*.12, done:false}]);
+  S.trouble=[];
   if(level.id==='limited') S.queue=7; else if(level.id==='basic') S.queue=3;
   S.croc = srcKey==='river';
   hideAlert(); $('caption').hidden=true; $('skip').hidden=true; $('toast').textContent='';
@@ -820,7 +824,7 @@ function loop(now){
 }
 function walkStep(dt){
   const back=S.phase==='back', l=level;
-  const hz = back? S.backHz : S.outHz;
+  const hz = (back? S.backHz : S.outHz).find(h=>!h.done);
   // live alert (wildlife reaction)
   if(S.react){
     S.react.t-=dt;
@@ -861,13 +865,15 @@ function triggerHazard(hz,hx){
   if(hz.kind==='dogs') showAlert('黑暗裡有幾隻'+kid.animal+'朝你走來！<small>馬上放開按鈕，停下來不要跑</small>');
   else showAlert('腳邊的草叢裡有蛇！<small>馬上放開按鈕，停下來別動</small>');
 }
+function trouble(t){ if(!S.trouble.includes(t)) S.trouble.push(t); }
 function passHazard(ok){
   const k=S.react.kind; S.react=null;
-  if(ok){
+  const an = k==='dogs'? kid.animal : '蛇';
+  if(ok){ trouble('遇到'+an);
     showAlert(k==='dogs'?'你站著不動，'+kid.animal+'繞了你兩圈，走開了。':'你停下來，蛇從腳邊滑進草叢。',true);
     logp(k==='dogs'?'遇到'+kid.animal+'，停下來等牠們走開':'遇到蛇，停下來等牠離開'); S.clock+=4;
   } else {
-    S.attacked = k==='dogs'?'被'+kid.animal+'咬傷':'被蛇嚇到摔傷';
+    S.attacked = k==='dogs'?'被'+kid.animal+'咬傷':'被蛇嚇到摔傷'; trouble(S.attacked);
     showAlert(k==='dogs'?'你繼續往前，'+kid.animal+'撲上來，你摔倒、腿被咬傷。':'你一腳踩過去，蛇竄起來，你摔倒扭傷腳踝。',true);
     S.injured=true; S.stamina=Math.max(.1,S.stamina-.45); S.stun=1.5; S.clock+=15; S.falls++;
     if(S.liters>0){ const sp=Math.min(S.liters,6); S.liters-=sp; S.spilled+=sp; }
@@ -889,10 +895,11 @@ function violenceEvent(){
      {label:'躲在樹後，等其他取水的人一起走',sub:'+15 分鐘',k:'wait'},
      {label:'低頭快步走過去',sub:'不知道會發生什麼',k:'go'}],
     o=>{
+      trouble('被路口的陌生人盯上');
       if(o.k==='detour'){ S.clock+=20; S.dist+=1; S.stamina=Math.max(.15,S.stamina-.3); logp('路口有人盯著，繞遠路回家'); toast('你繞了一大圈。'); S.hazard=null; }
       else if(o.k==='wait'){ S.clock+=15; logp('路口有人盯著，躲起來等大人一起走'); toast('等到隔壁的阿姨，才敢一起走過去。'); S.hazard=null; }
       else if(rnd()<.5){ S.clock+=2; logp('低頭快步經過路口，他們只是看著'); toast('他們只是看著你走過。你的心跳很久才慢下來。'); }
-      else { const sp=Math.min(S.liters,8); S.liters-=sp; S.spilled+=sp; S.clock+=6; S.threat='在路口被攔住推倒'; S.stamina=Math.max(.1,S.stamina-.3);
+      else { const sp=Math.min(S.liters,8); S.liters-=sp; S.spilled+=sp; S.clock+=6; S.threat='在路口被攔住推倒'; trouble(S.threat); S.stamina=Math.max(.1,S.stamina-.3);
         logp('在路口被攔住、推倒，抱著水桶跑開，灑掉 '+sp+' 公升'); toast('他們擋住你、推了你一把。你抱著水桶跑開，灑掉 '+sp+' 公升。'); }
       setTask(walkTaskHtml(true)); holdButton(S.liters>0?'按住 回家':'按住 走回家');
     });
@@ -903,9 +910,9 @@ function emptyEvent(){
     ? [{label:'回頭再去取一次',sub:'再走一趟，上學會更晚',k:'again'},{label:'沒力氣了，空手回家',sub:'今天家裡沒有水',k:'home'}]
     : [{label:'空手回家',sub:'你已經沒有力氣再走一趟',k:'home'}];
   choice('水桶空了', canGo?'一路跌倒、灑水，桶子裡的 20 公升全沒了。家裡還在等這桶水。':'第二桶水也灑光了。你的腿在發抖，手也提不動了。', opts, o=>{
-    if(o.k==='again'){ S.trips++; S.phase='out'; S.legBack=false; S.stamina=Math.max(S.stamina,.4); logp('水全灑光了，回頭再去取一次');
+    if(o.k==='again'){ S.trips++; S.phase='out'; S.legBack=false; S.stamina=Math.max(S.stamina,.4); logp('水全灑光了，回頭再去取一次'); trouble('水全灑光');
       setTask('<b>回頭走向水源。</b>同一段路，再走一次。'); holdButton('按住 回水源'); }
-    else { S.emptyHome=true; logp('水全灑光了，沒力氣再取，空手走回家');
+    else { S.emptyHome=true; logp('水全灑光了，沒力氣再取，空手走回家'); trouble('水全灑光');
       setTask('<b>空手走回家。</b>腿很痛，走得很慢。'); holdButton('按住 回家'); }
   });
 }
@@ -931,8 +938,8 @@ function arriveSource(){
     showAlert('河面上有一條水蛇游來游去。',true);
     choice('河面上有一條水蛇','你要裝水的地方，牠就在附近游。',
       [{label:'等牠游走',sub:'+25 分鐘',min:25,k:'w'},{label:'趕快舀水',sub:'冒險',min:2,k:'r'}],
-      o=>{ hideAlert();
-        if(o.k==='r' && rnd()<.45){ S.attacked='在河邊被水蛇咬傷'; S.injured=true; S.stamina=Math.max(.1,S.stamina-.4); S.falls++;
+      o=>{ hideAlert(); trouble('河邊有水蛇');
+        if(o.k==='r' && rnd()<.45){ S.attacked='在河邊被水蛇咬傷'; trouble(S.attacked); S.injured=true; S.stamina=Math.max(.1,S.stamina-.4); S.falls++;
           toast('水蛇朝你的手游過來，你被咬了一口，丟下一半的水往岸上跑。'); done({min:8,cap:10},'在河邊被水蛇咬傷，只裝到半桶就逃開'); }
         else { S.croc=false; done(o, o.k==='w'?'等水蛇游走，在河邊等了 25 分鐘':'趕在水蛇靠近前舀滿水'); } });
   }
@@ -984,13 +991,14 @@ function finish(){
   if(S.unsafe) q='這桶水沒有經過保護或處理，可能帶著糞便汙染，喝了容易腹瀉。'+sick;
   else if(S.contaminated) q=sick.trim();
   else q='水源有保護，這次的水驗起來是乾淨的。';
-  const safety = S.attacked||S.threat ? ' 這一趟你'+[S.attacked,S.threat].filter(Boolean).join('，又')+'。' : '';
+  const tl = S.trouble.slice(); if(S.falls>0) tl.push('跌倒 '+S.falls+' 次');
+  const safety = tl.length ? ' 這一趟路上：'+tl.join('、')+'。' : '';
   const school = late>0 ? ' 上學遲到 '+dur(late)+'。' : ' 你趕上了 7:30 的第一堂課。';
   $('rText').textContent = S.emptyHome
     ? '水在路上全灑光了，你沒有力氣再走一趟，拖著腳走了很久才到家。今天全家沒有水煮飯、洗澡，你累到沒去上學；腿傷沒好，明天也走不了這一趟，全家明天一樣沒有水可以用。'+safety+''
     : q + safety + school + '';
   const quality = S.unsafe? '<span class="bad">未經處理</span>' : S.contaminated? '<span class="bad">驗出大腸桿菌</span>' : '乾淨';
-  const safe = (S.attacked||S.threat)? '<span class="bad">'+[S.attacked,S.threat].filter(Boolean).join('、')+'</span>' : '平安回家';
+  const safe = '<span class="bad">'+tl.join('、')+'</span>';
   const st=[
     ['花費時間', dur(mins)],
     ['帶回 / 灑掉', Math.round(S.liters)+' / '+S.spilled+' 公升'],
@@ -1002,7 +1010,7 @@ function finish(){
   $('rBtns').innerHTML = '<button class="btn" id="again">再出生一次</button>';
   $('again').onclick=startWho;
   S.shareText = '我在「80億分之1・取水版」抽到「'+l.name+'」，走到'+SRC[srcKey].name+'取水，總共走了 '+S.dist.toFixed(1)+' 公里、花了 '+dur(mins)+'，'+(S.emptyHome?'最後空手回家':'帶回 '+Math.round(S.liters)+' 公升')
-    +((S.attacked||S.threat)?'，路上'+[S.attacked,S.threat].filter(Boolean).join('、'):'')+(S.emptyHome?'，累到沒去上學':late>0?'，上學遲到 '+dur(late):'')+'。全世界有 '+popText(l.pop)+'過著這樣的早上。';
+    +(tl.length?'，路上'+tl.join('、'):'')+(S.emptyHome?'，累到沒去上學':late>0?'，上學遲到 '+dur(late):'')+'。全世界有 '+popText(l.pop)+'過著這樣的早上。';
   $('copyMsg').textContent='';
 }
 function finishSafe(){
