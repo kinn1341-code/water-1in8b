@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="轉動命運轉盤，走一趟取水路：鬣狗、水蛇、路口的陌生人和髒水。2 分鐘體驗全球約 22 億沒有安全飲用水的人的早上。">
+<meta name="description" content="轉動命運轉盤，走一趟取水路：野狗、水蛇、路口的陌生人和髒水。2 分鐘體驗全球約 22 億沒有安全飲用水的人的早上。">
 <meta property="og:title" content="80億分之1・取水版">
 <meta property="og:description" content="轉動命運轉盤，走一趟取水路。2027 Global 6K For Water">
 <meta property="og:image" content="https://kinn1341-code.github.io/water-1in8b/og-cover.jpg">
@@ -183,7 +183,7 @@ p{margin:0 0 12px}
   <section class="screen" id="s-intro">
     <div class="eyebrow">2027 Global 6K For Water · 取水模擬</div>
     <h1>80億分之<em>1</em><br>取水版</h1>
-    <p class="lead">全世界 82 億人裡，約有 22 億人沒有安全的飲用水，1.06 億人每天直接喝河流、池塘的水。家裡沒有自來水的家庭，多半由婦女和女孩負責取水。她們天還沒亮就出門，路上要提防鬣狗、蛇，也要提防盯著她們的人。</p>
+    <p class="lead">全世界 82 億人裡，約有 22 億人沒有安全的飲用水，1.06 億人每天直接喝河流、池塘的水。家裡沒有自來水的家庭，多半由婦女和女孩負責取水。她們天還沒亮就出門，路上要提防野狗、蛇，也要提防盯著她們的人。</p>
     <div class="row" style="margin-top:20px">
       <button class="btn" id="go">出生</button>
       <span class="small">（遊戲需 2 分鐘）</span>
@@ -396,11 +396,17 @@ function revealDraw(l){
 }
 /* ---------- WHO: five example children from WVT-supported water programme areas ---------- */
 const KIDS=[
-  {name:'阿米娜塔',g:'f',age:10,country:'馬利',area:'傑凱巴哈',region:'非洲',fam:9,note:'村子裡只有傳統水井。你要走很遠的路去取水，到了還要排很久的隊。'},
-  {name:'奇孔迪',g:'m',age:9,country:'馬拉威',area:'坎培薩',region:'非洲',fam:6,note:'家裡沒有自來水。天還沒亮，你就要提著空桶出門。'},
-  {name:'法圖瑪',g:'f',age:12,country:'尼日',area:'塔瓦',region:'非洲',fam:8,note:'這裡還在人道救援和重建中，乾淨的水很難取得。'},
-  {name:'丁恩',g:'m',age:11,country:'南蘇丹',area:'朱巴曼加拉聚落',region:'非洲',fam:7,note:'你們一家逃離家鄉，現在住在安置聚落裡，每天都要出去找水。'},
-  {name:'梅倫',g:'f',age:8,country:'衣索比亞',area:'奇勒加',region:'非洲',fam:5,note:'你是家裡最大的女孩，提水回家是你每天早上的工作。'}
+  // five example children from WVT-supported water programme areas across regions; each has their own look
+  {name:'阿米娜塔',g:'f',age:10,country:'馬利',area:'傑凱巴哈',region:'非洲',fam:9,note:'村子裡只有傳統水井。你要走很遠的路去取水，到了還要排很久的隊。',
+   skin:[104,66,46],hair:'wrap',wrap:[255,85,21],top:[236,108,84],pattern:[150,48,40],beads:true,feet:'bare',animal:'鬣狗'},
+  {name:'奇孔迪',g:'m',age:9,country:'馬拉威',area:'坎培薩',region:'非洲',fam:6,note:'家裡沒有自來水。天還沒亮，你就要提著空桶出門。',
+   skin:[92,58,40],hair:'curly',top:[122,176,146],patch:true,feet:'worn',animal:'鬣狗'},
+  {name:'阮氏蘭',g:'f',age:11,country:'越南',area:'石城',region:'亞洲',fam:6,note:'家裡沒有乾淨的水，你每天要走到村外取水。',
+   skin:[214,170,128],hair:'buns',top:[96,150,200],feet:'worn',animal:'野狗'},
+  {name:'阿里',g:'m',age:12,country:'伊拉克',area:'圖茲',region:'中東',fam:7,note:'這裡清水很少，原本的水源也被汙染了。',
+   skin:[190,138,96],hair:'short',top:[200,170,110],patch:true,feet:'worn',animal:'野狗'},
+  {name:'卡蜜拉',g:'f',age:9,country:'尼加拉瓜',area:'康帝加',region:'拉丁美洲',fam:5,note:'家裡沒有自來水。天還沒亮，你就要提著空桶出門。',
+   skin:[168,112,74],hair:'buns',top:[236,196,92],pattern:[200,90,60],feet:'bare',animal:'野狗'}
 ];
 let kid=KIDS[0];
 function startWho(){
@@ -543,22 +549,22 @@ function drawHazard(t){
     ctx.fillStyle=C([70,74,40],[16,18,14]); ctx.beginPath(); ctx.ellipse(cx-3,GY+13+Math.sin(t*6)*3.5,5,3.5,0,0,7); ctx.fill(); }
   const hz=S.hazard; if(!hz||!hz.visible) return;
   const x=px(hz.x), dark=LIGHT<0.45;
-  if(hz.kind==='dogs'){
+  if(hz.kind==='dogs'){ const hy=kid.animal==='鬣狗';
     for(let i=0;i<3;i++){ const dx=x+i*34, bob=Math.sin(t*6+i)*1.5;   // spotted hyena: high shoulders, sloping back
-      const fur=C([150,122,84],[44,38,34]), dk=C([70,56,40],[20,18,16]);
+      const fur=hy?C([150,122,84],[44,38,34]):C([170,140,100],[48,42,36]), dk=C([70,56,40],[20,18,16]);
       ctx.fillStyle=fur; ctx.save(); ctx.translate(dx,GY-24+bob); ctx.rotate(0.2); ctx.beginPath(); ctx.ellipse(0,0,18,8,0,0,7); ctx.fill(); ctx.restore();
       ctx.fillRect(dx-13,GY-26+bob,3.5,26-bob); ctx.fillRect(dx-8,GY-25+bob,3.5,25-bob); ctx.fillRect(dx+9,GY-18+bob,3.5,18-bob); ctx.fillRect(dx+13,GY-17+bob,3.5,17-bob);
       ctx.beginPath(); ctx.ellipse(dx-20,GY-33+bob,7,6,0,0,7); ctx.ellipse(dx-27,GY-31+bob,5,3.5,0,0,7); ctx.fill();
       ctx.beginPath(); ctx.arc(dx-18,GY-39+bob,2.6,0,7); ctx.arc(dx-22,GY-39+bob,2.6,0,7); ctx.fill();
-      ctx.fillStyle=dk; for(const [sx,sy] of [[-6,-27],[0,-25],[6,-22],[-2,-21],[10,-19]]){ ctx.beginPath(); ctx.arc(dx+sx,GY+sy+bob,1.8,0,7); ctx.fill(); }
-      ctx.fillRect(dx-14,GY-34+bob,10,2.5);
+      if(hy){ ctx.fillStyle=dk; for(const [sx,sy] of [[-6,-27],[0,-25],[6,-22],[-2,-21],[10,-19]]){ ctx.beginPath(); ctx.arc(dx+sx,GY+sy+bob,1.8,0,7); ctx.fill(); }
+      ctx.fillRect(dx-14,GY-34+bob,10,2.5); }
       if(dark){ctx.fillStyle='#ffd34d'; ctx.fillRect(dx-25,GY-35+bob,2,2);} }
   } else if(hz.kind==='snake'){
     ctx.strokeStyle=C([96,86,40],[20,20,16]); ctx.lineWidth=4; ctx.lineCap='round'; ctx.beginPath();
     for(let i=0;i<=20;i++){const sx=x+i*2.6, sy=GY+4-Math.sin(i*.6+t*5)*4-(i>16?(i-16)*3:0); i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);} ctx.stroke();
   } else if(hz.kind==='men'){
     for(let i=0;i<3;i++){ ctx.save(); ctx.translate(x+i*26, GY-2); ctx.scale(1.05,1.05);
-      drawToon({adult:true, feet:'worn', dir:-1, top:[70,66,78], bottom:[44,40,48], skin:[86,62,50], hair:'short', faceless:true}); ctx.restore();
+      drawToon({adult:true, feet:'worn', dir:-1, top:[70,66,78], bottom:[44,40,48], skin:kid.skin.map(v=>Math.round(v*.78)), hair:'short', faceless:true}); ctx.restore();
       ctx.fillStyle='rgba(255,236,150,.9)'; ctx.fillRect(x+i*26-5,GY-2-67*1.05,2.4,2); ctx.fillRect(x+i*26+1,GY-2-67*1.05,2.4,2); }
   } else if(hz.kind==='croc'){
     ctx.fillStyle=C([62,72,48],[14,16,14]); const cx=x+Math.sin(t*0.8)*6;
@@ -650,9 +656,9 @@ function drawWalker(t){
   // heavy load: lean into the walk and wobble a little
   if(!fallen && carrying){ ctx.rotate((moving?-.1:-.05)*dir + (moving?Math.sin(t*4.5)*.03:0)); }
   const girl=kid.g==='f';
-  const look={sw:carrying?sw*.6:sw, dir, mood, dress:girl, top: girl?[236,108,84]:[122,176,146], bottom:[56,52,66], skin:[110,70,48],
-    hair: girl?'wrap':'curly', wrap:[255,85,21], pattern: girl?[150,48,40]:null, patch:!girl, beads:girl, feet: girl?'bare':'worn', arms:false};
-  const skin=C([124,82,56],[34,28,30]);
+  const look={sw:carrying?sw*.6:sw, dir, mood, dress:girl, top:kid.top, bottom:[56,52,66], skin:kid.skin,
+    hair:kid.hair, wrap:kid.wrap, pattern:kid.pattern||null, patch:!!kid.patch, beads:!!kid.beads, feet:kid.feet, arms:false};
+  const skin=C(kid.skin,[34,28,30]);
   const carryHead = back && S.liters>0;
   drawToon(look);
   // arms + jerrycan, drawn last so they sit in front
@@ -691,7 +697,7 @@ function render(now){
   drawSource(t);
   if(S.queue){ const tops=[[124,176,186],[236,196,92],[122,176,146],[236,108,84],[170,140,200]];
     for(let i=0;i<S.queue;i++){ const qx=px(WORLD.src)+46+i*26; ctx.save(); ctx.translate(qx,GY-2); ctx.scale(.82,.82);
-      drawToon({dir:1, dress:i%2===0, top:tops[i%tops.length], skin:[104+i*6,68+i*3,46], hair:i%2?'curly':'wrap', wrap:[[40,120,200],[250,190,50],[140,60,140]][i%3], pattern:i%2===0?[90,50,40]:null, patch:i%2===1, feet:i%2?'worn':'bare', mood:i%3===0?'tired':'strain'}); ctx.restore(); jerry(qx+8,GY-16,.7);} }
+      drawToon({dir:1, dress:i%2===0, top:tops[i%tops.length], skin:kid.skin.map((v,k)=>Math.max(0,Math.min(255,v+[-14,6,-6,12,0][i%5]*(k===2?.6:1)))), hair:kid.region==='非洲'?(i%2?'curly':'wrap'):(i%2?'short':'buns'), wrap:[[40,120,200],[250,190,50],[140,60,140]][i%3], pattern:i%2===0?[90,50,40]:null, patch:i%2===1, feet:i%2?'worn':'bare', mood:i%3===0?'tired':'strain'}); ctx.restore(); jerry(qx+8,GY-16,.7);} }
   drawHazard(t);
   drawWalker(t);
   // foreground grass
@@ -804,20 +810,20 @@ function triggerHazard(hz,hx){
   const dark=LIGHT<0.45, win= dark? .9 : 1.2;
   S.hazard={kind:hz.kind,x:hx+40,visible:true};
   S.react={kind:hz.kind,t:win,still:0};
-  if(hz.kind==='dogs') showAlert('黑暗裡有幾隻鬣狗朝你走來！<small>馬上放開按鈕，停下來不要跑</small>');
+  if(hz.kind==='dogs') showAlert('黑暗裡有幾隻'+kid.animal+'朝你走來！<small>馬上放開按鈕，停下來不要跑</small>');
   else showAlert('腳邊的草叢裡有蛇！<small>馬上放開按鈕，停下來別動</small>');
 }
 function passHazard(ok){
   const k=S.react.kind; S.react=null;
   if(ok){
-    showAlert(k==='dogs'?'你站著不動，鬣狗繞了你兩圈，走開了。':'你停下來，蛇從腳邊滑進草叢。',true);
-    logp(k==='dogs'?'遇到鬣狗，停下來等牠們走開':'遇到蛇，停下來等牠離開'); S.clock+=4;
+    showAlert(k==='dogs'?'你站著不動，'+kid.animal+'繞了你兩圈，走開了。':'你停下來，蛇從腳邊滑進草叢。',true);
+    logp(k==='dogs'?'遇到'+kid.animal+'，停下來等牠們走開':'遇到蛇，停下來等牠離開'); S.clock+=4;
   } else {
-    S.attacked = k==='dogs'?'被鬣狗咬傷':'被蛇嚇到摔傷';
-    showAlert(k==='dogs'?'你繼續往前，鬣狗撲上來，你摔倒、腿被咬傷。':'你一腳踩過去，蛇竄起來，你摔倒扭傷腳踝。',true);
+    S.attacked = k==='dogs'?'被'+kid.animal+'咬傷':'被蛇嚇到摔傷';
+    showAlert(k==='dogs'?'你繼續往前，'+kid.animal+'撲上來，你摔倒、腿被咬傷。':'你一腳踩過去，蛇竄起來，你摔倒扭傷腳踝。',true);
     S.injured=true; S.stamina=Math.max(.1,S.stamina-.45); S.stun=1.5; S.clock+=15; S.falls++;
     if(S.liters>0){ const sp=Math.min(S.liters,6); S.liters-=sp; S.spilled+=sp; }
-    logp(k==='dogs'?'被鬣狗攻擊，腿受傷，走得更慢':'踩到蛇摔倒，扭傷腳踝，走得更慢');
+    logp(k==='dogs'?'被'+kid.animal+'攻擊，腿受傷，走得更慢':'踩到蛇摔倒，扭傷腳踝，走得更慢');
   }
   S.holding=false; $('holdBtn')&&$('holdBtn').classList.remove('on');
   setTimeout(()=>{ hideAlert(); S.hazard=null; }, 1900);
@@ -955,7 +961,7 @@ function finishSafe(){
   show('result');
   const l=level;
   $('rTitle').textContent='1 分鐘，20 公升。';
-  $('rText').textContent='水就在家裡，打開水龍頭就有。你不用天黑出門，不用排隊，路上也沒有鬣狗、蛇和盯著你的人，吃完早餐準時到學校。轉盤上這一格只有 5%，真實世界裡 74% 的人過著這樣的早上；另外約 22 億人，每天天亮前就要走出家門找水。';
+  $('rText').textContent='水就在家裡，打開水龍頭就有。你不用天黑出門，不用排隊，路上也沒有野狗、蛇和盯著你的人，吃完早餐準時到學校。轉盤上這一格只有 5%，真實世界裡 74% 的人過著這樣的早上；另外約 22 億人，每天天亮前就要走出家門找水。';
   $('rStats').innerHTML=[['花費時間','1 分鐘'],['帶回 / 灑掉','20 / 0 公升'],['路上安全','不用出門',1],['到校','準時',1]]
     .map(s=>`<div><dt>${s[0]}</dt><dd class="${s[2]?'txt':''}">${s[1]}</dd></div>`).join('');
   $('rLog').innerHTML=[['05:30','起床'],['05:31','打開廚房的水龍頭，裝滿 20 公升'],['07:00','吃完早餐出門上學'],['07:25','到學校']]
