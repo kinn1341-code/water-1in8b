@@ -504,6 +504,47 @@ function hut(x,y,s){
   ctx.strokeStyle=C([160,126,72],[30,26,24]); ctx.lineWidth=1;
   for(let i=-3;i<=3;i++){ctx.beginPath();ctx.moveTo(x,y-68*s);ctx.lineTo(x+i*11*s,y-31*s);ctx.stroke();}
 }
+/* ---------- regional scenery ---------- */
+const THEMES={
+  savanna:{far:'ridge', farC:[110,128,156], midC:[130,118,74], tree:'acacia', treeC:[66,64,38], g1:[168,124,80], g2:[128,90,58], path:[206,166,116], tuft:[150,138,70], fg:[86,80,38], house:'hut'},
+  vietnam:{far:'karst', farC:[96,128,140], midC:[78,128,72], tree:'banana', treeC:[52,108,56], g1:[98,146,74], g2:[70,108,56], path:[184,156,112], tuft:[90,150,70], fg:[44,96,46], house:'tile', paddy:true},
+  iraq:{far:'mesa', farC:[176,160,136], midC:[206,182,140], tree:'palm', treeC:[96,104,60], g1:[214,190,146], g2:[186,158,116], path:[230,210,170], tuft:[170,156,104], fg:[150,134,84], house:'flat', sparse:true},
+  nicaragua:{far:'volcano', farC:[92,120,130], midC:[70,118,70], tree:'pine', treeC:[40,86,52], g1:[150,104,70], g2:[116,78,52], path:[196,150,108], tuft:[96,140,66], fg:[48,92,44], house:'adobe', mixBanana:true}
+};
+const COUNTRY_THEME={'馬利':'savanna','馬拉威':'savanna','越南':'vietnam','伊拉克':'iraq','尼加拉瓜':'nicaragua'};
+function theme(){ return THEMES[COUNTRY_THEME[kid.country]]||THEMES.savanna; }
+function farShape(kind, par, base, col){
+  ctx.fillStyle=col; ctx.beginPath(); ctx.moveTo(0,H);
+  for(let x=0;x<=W;x+=4){ const wx=x+CAM*par; let y;
+    if(kind==='karst'){ const v=Math.pow(Math.abs(Math.sin(wx*.034)),.22)*(.45+.55*Math.abs(Math.sin(wx*.0061+1))); y=base+26-v*96; }
+    else if(kind==='mesa'){ y=base+10-clamp(Math.sin(wx*.0042)*3,-1,1)*9-2*Math.sin(wx*.03); }
+    else if(kind==='volcano'){ const vx=W*.62-CAM*par*.3, d=Math.abs(x-vx); y=Math.min(base+12+10*Math.sin(wx*.007), base+18-Math.max(0,118-d*.62)); }
+    else y=base+16*Math.sin(wx*.0042+1)+9*Math.sin(wx*.011+2);
+    ctx.lineTo(x,y); }
+  ctx.lineTo(W,H); ctx.fill();
+}
+function palm(x,y,s,col){ ctx.strokeStyle=col; ctx.lineWidth=4*s; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x,y); ctx.quadraticCurveTo(x+6*s,y-34*s,x+2*s,y-70*s); ctx.stroke();
+  ctx.lineWidth=2.6*s; for(let k=0;k<7;k++){ const a=-Math.PI*.95+k*Math.PI*.32; ctx.beginPath(); ctx.moveTo(x+2*s,y-70*s);
+    ctx.quadraticCurveTo(x+2*s+Math.cos(a)*16*s,y-70*s+Math.sin(a)*16*s-6*s,x+2*s+Math.cos(a)*30*s,y-70*s+Math.sin(a)*14*s+10*s); ctx.stroke(); }
+  ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x+2*s,y-66*s,3.5*s,0,7); ctx.fill(); }
+function banana(x,y,s,col){ ctx.strokeStyle=col; ctx.lineWidth=4*s; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,y-34*s); ctx.stroke();
+  ctx.fillStyle=col; for(let k=0;k<5;k++){ const a=-Math.PI/2+(k-2)*.62; ctx.save(); ctx.translate(x,y-34*s); ctx.rotate(a+Math.PI/2);
+    ctx.beginPath(); ctx.ellipse(0,-17*s,6*s,18*s,0,0,7); ctx.fill(); ctx.restore(); } }
+function pine(x,y,s,col){ ctx.fillStyle=col; ctx.fillRect(x-1.6*s,y-12*s,3.2*s,12*s);
+  for(let k=0;k<4;k++){ const w=(18-k*4)*s, yy=y-10*s-k*13*s; ctx.beginPath(); ctx.moveTo(x-w,yy); ctx.lineTo(x,yy-20*s); ctx.lineTo(x+w,yy); ctx.closePath(); ctx.fill(); } }
+function house(kind,x,y,s){
+  if(kind==='hut') return hut(x,y,s);
+  const wall={tile:[214,206,184],flat:[196,164,118],adobe:[236,228,212]}[kind], roof={tile:[96,84,80],adobe:[182,84,52]}[kind];
+  const w=56*s, h=(kind==='flat'?30:28)*s;
+  ctx.fillStyle=C(wall,[34,30,30]); ctx.fillRect(x-w/2,y-h,w,h);
+  ctx.fillStyle=C([90,64,44],[18,16,16]); ctx.fillRect(x-6*s,y-19*s,12*s,19*s);
+  ctx.fillStyle=C([60,56,60],[12,12,16]); ctx.fillRect(x+12*s,y-20*s,8*s,7*s); if(kind!=='flat') ctx.fillRect(x-20*s,y-20*s,8*s,7*s);
+  if(kind==='flat'){ ctx.fillStyle=C([176,144,100],[28,26,26]); ctx.fillRect(x-w/2-2*s,y-h-4*s,w+4*s,5*s);
+    ctx.fillStyle=C([120,96,66],[22,20,20]); for(let k=0;k<4;k++) ctx.fillRect(x-w/2+6*s+k*13*s,y-h+2*s,2.5*s,2.5*s); return; }
+  ctx.fillStyle=C(roof,[26,22,22]); ctx.beginPath(); ctx.moveTo(x-w/2-8*s,y-h+2*s); ctx.lineTo(x-w/2+10*s,y-h-22*s); ctx.lineTo(x+w/2-10*s,y-h-22*s); ctx.lineTo(x+w/2+8*s,y-h+2*s); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle=C(roof.map(v=>v-30),[18,16,16]); ctx.lineWidth=1; for(let k=1;k<4;k++){ ctx.beginPath(); ctx.moveTo(x-w/2-8*s+k*4*s,y-h+2*s-k*6*s); ctx.lineTo(x+w/2+8*s-k*4*s,y-h+2*s-k*6*s); ctx.stroke(); }
+}
 function person(x,y,s,col){ ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y-62*s,7*s,0,7); ctx.fill(); ctx.fillRect(x-7*s,y-54*s,14*s,30*s); ctx.fillRect(x-6*s,y-24*s,5*s,24*s); ctx.fillRect(x+1*s,y-24*s,5*s,24*s); }
 function jerry(x,y,s,full){
   ctx.fillStyle=C([240,190,36],[62,52,28]); ctx.fillRect(x,y,16*s,20*s);
@@ -679,21 +720,28 @@ function render(now){
   CAM = clamp(S.wx-W*0.4, -40, WORLD.len-W+120);
   S.sun = drawSky(S.clock);
   const haze=(day,night,h)=>rgb(mixc(mixc(night,day,LIGHT),HOR,h));
-  ridge(.12, 206, 16,.0042,9,.011,1, haze([110,128,156],[22,28,50],.45));
-  ridge(.3, 236, 10,.006,6,.017,2, haze([130,118,74],[20,24,30],.2));
-  for(const tr of WORLD.trees){ const x=tr[0]-CAM*.45; if(x>-80&&x<W+80) acacia(x, 248+tr[2]*10, tr[1]*.8, haze([66,64,38],[12,14,18],.12)); }
+  const th=theme();
+  farShape(th.far, .12, 206, haze(th.farC,[22,28,50],.45));
+  ridge(.3, 236, 10,.006,6,.017,2, haze(th.midC,[20,24,30],.2));
+  for(const tr of WORLD.trees){ if(th.sparse && tr[2]<.55) continue; const x=tr[0]-CAM*.45; if(x<-80||x>W+80) continue;
+    const ty=248+tr[2]*10, ts=tr[1]*.8, tc=haze(th.treeC,[12,14,18],.12);
+    const kind = th.mixBanana && tr[2]>.6 ? 'banana' : th.tree;
+    if(kind==='palm') palm(x,ty,ts,tc); else if(kind==='banana'){ banana(x,ty,ts,tc); if(th.paddy){ banana(x+22*ts,ty+3,ts*.75,tc); } } else if(kind==='pine'){ pine(x,ty,ts,tc); pine(x+18*ts,ty+2,ts*.8,tc); } else acacia(x,ty,ts,tc); }
   // ground
-  const g=ctx.createLinearGradient(0,262,0,H); g.addColorStop(0,C([168,124,80],[30,28,32])); g.addColorStop(1,C([128,90,58],[20,18,22]));
+  const g=ctx.createLinearGradient(0,262,0,H); g.addColorStop(0,C(th.g1,[30,28,32])); g.addColorStop(1,C(th.g2,[20,18,22]));
   ctx.fillStyle=g; ctx.beginPath(); ctx.moveTo(0,H); for(let x=0;x<=W;x+=10) ctx.lineTo(x,266+4*Math.sin((x+CAM)*.01)); ctx.lineTo(W,H); ctx.fill();
-  ctx.fillStyle=C([206,166,116],[46,40,44]); ctx.beginPath(); ctx.moveTo(0,GY-8); for(let x=0;x<=W;x+=10) ctx.lineTo(x,GY-8+2*Math.sin((x+CAM)*.02)); ctx.lineTo(W,GY+10); ctx.lineTo(0,GY+10); ctx.fill();
+  if(th.paddy){ // flooded rice terraces catch the sky
+    for(let k=0;k<3;k++){ const yy=272+k*9; ctx.fillStyle=rgb(mixc(HOR,[120,160,120],.45)); ctx.globalAlpha=.55;
+      for(let x0=-((CAM*.9+k*70)%160); x0<W; x0+=160){ ctx.fillRect(x0+8,yy,120,4); } ctx.globalAlpha=1; } }
+  ctx.fillStyle=C(th.path,[46,40,44]); ctx.beginPath(); ctx.moveTo(0,GY-8); for(let x=0;x<=W;x+=10) ctx.lineTo(x,GY-8+2*Math.sin((x+CAM)*.02)); ctx.lineTo(W,GY+10); ctx.lineTo(0,GY+10); ctx.fill();
   // grass tufts + rocks
-  ctx.strokeStyle=C([150,138,70],[24,28,24]); ctx.lineWidth=1.4;
-  for(const tf of WORLD.tufts){ const x=px(tf[0]); if(x<-10||x>W+10) continue; const y=274+tf[1]+(tf[1]>18?20:0);
+  ctx.strokeStyle=C(th.tuft,[24,28,24]); ctx.lineWidth=1.4;
+  for(const tf of WORLD.tufts){ if(th.sparse && tf[2]<.5) continue; const x=px(tf[0]); if(x<-10||x>W+10) continue; const y=274+tf[1]+(tf[1]>18?20:0);
     for(let i=-2;i<=2;i++){ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+i*3+Math.sin(t+tf[2]*6)*1.5,y-6-tf[2]*8); ctx.stroke();} }
   ctx.fillStyle=C([150,140,128],[30,30,34]);
   for(const r of WORLD.rocks){ const x=px(r[0]); if(x>-20&&x<W+20){ ctx.beginPath(); ctx.ellipse(x,GY+14+r[1]*12,6+r[1]*6,3+r[1]*3,0,0,7); ctx.fill(); } }
   // village
-  hut(px(WORLD.home)-60, 286, .8); hut(px(WORLD.home)+30, GY-6, 1); hut(px(WORLD.home)-130, GY-2, .9);
+  house(th.house,px(WORLD.home)-60, 286, .8); house(th.house,px(WORLD.home)+30, GY-6, 1); house(th.house,px(WORLD.home)-130, GY-2, .9);
   drawSource(t);
   if(S.queue){ const tops=[[124,176,186],[236,196,92],[122,176,146],[236,108,84],[170,140,200]];
     for(let i=0;i<S.queue;i++){ const qx=px(WORLD.src)+46+i*26; ctx.save(); ctx.translate(qx,GY-2); ctx.scale(.82,.82);
@@ -701,8 +749,8 @@ function render(now){
   drawHazard(t);
   drawWalker(t);
   // foreground grass
-  ctx.fillStyle=C([86,80,38],[8,10,10]);
-  for(const f of WORLD.fg){ const x=f[0]-CAM*1.35; if(x<-10||x>W+10) continue; const h=10+f[1]*22;
+  ctx.fillStyle=C(th.fg,[8,10,10]);
+  for(const f of WORLD.fg){ if(th.sparse && f[1]<.6) continue; const x=f[0]-CAM*1.35; if(x<-10||x>W+10) continue; const h=10+f[1]*22;
     ctx.beginPath(); ctx.moveTo(x-2,H); ctx.lineTo(x+Math.sin(t*1.3+f[1]*5)*3,H-h); ctx.lineTo(x+2,H); ctx.fill(); }
   // golden-hour warmth / night tint
   const gold=clamp(1-Math.abs(S.sun.e-0.04)/0.14,0,1);
