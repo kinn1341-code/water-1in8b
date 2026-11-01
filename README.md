@@ -2,7 +2,8 @@
 
 2027 Global 6K For Water 取水模擬小遊戲（台灣世界展望會）。轉動「命運」轉盤決定家裡的供水等級，走一趟取水路，約 2 分鐘。
 
-- 網址：https://kinn1341-code.github.io/water-1in8b/
+- 原版網址：https://kinn1341-code.github.io/water-1in8b/（`index.html`）
+- 彩色版網址：https://kinn1341-code.github.io/water-1in8b/color/（`color/index.html`）
 - 單一檔案：`index.html`（不需建置，GitHub Pages 直接發布）
 - 報名按鈕網址：搜尋 `REG_URL` 修改
 - 數據來源：WHO / UNICEF JMP 2025、JMP 2026（學校 WASH）
