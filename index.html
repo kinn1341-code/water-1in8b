@@ -201,7 +201,7 @@ body{background:var(--paper)}
 #s-intro .counter .cnt span{color:#fff}
 #s-intro .counter .cnt{align-items:center;justify-content:center}
 #s-intro .counter{text-align:center}
-.who div,.stats div,.idcard,.opt,.cv-steps div{border-radius:16px}
+.idcard,.opt,.cv-steps div{border-radius:16px}
 .stats,.who{border-radius:18px}
 .bib{border-radius:22px;box-shadow:0 2px 0 var(--line)}
 .bib-top{border-radius:0}
@@ -257,7 +257,6 @@ body{background:var(--paper)}
       <div><dt>住在</dt><dd id="whoPlace"></dd></div>
       <div><dt>家裡</dt><dd id="whoFam"></dd></div>
     </dl>
-    <p class="lead" id="whoNote"></p>
     <div class="center"><button class="btn" id="toWheel" style="margin-top:8px">你家的水，從哪裡來？</button></div>
   </section>
 
@@ -466,13 +465,13 @@ function startWho(){
   cancelAnimationFrame(introRaf);
   show('who');
   kid=KIDS[Math.floor(rnd()*KIDS.length)];
-  const card=$('whoCard'), btn=$('toWheel'); btn.hidden=true; $('whoNote').textContent='';
+  const card=$('whoCard'), btn=$('toWheel'); btn.hidden=true;
   const fill=k=>{ $('whoTitle').textContent='你是 '+k.age+' 歲、在'+k.country+'的孩子';
     $('whoName').textContent=k.name; $('whoSex').textContent=k.g==='f'?'女孩':'男孩';
     $('whoPlace').innerHTML='<span class="nw">'+k.country+'</span> <span class="nw">'+k.area+'</span><span class="nw">（'+k.region+'）</span>'; $('whoFam').textContent=k.fam+' 個人'; };
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches; let n=reduce?0:12;
   (function shuffle(){ if(n-->0){ fill(KIDS[Math.floor(rnd()*KIDS.length)]); setTimeout(shuffle,70+ (12-n)*12); }
-    else { fill(kid); $('whoNote').textContent=kid.note; btn.hidden=false; } })();
+    else { fill(kid); btn.hidden=false; } })();
 }
 $('go').onclick = startWho;
 $('toWheel').onclick = startDraw;
