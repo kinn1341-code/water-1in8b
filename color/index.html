@@ -1089,9 +1089,8 @@ function finishSafe(){
   S.shareText='我在「80億分之1 取水路」是出生在'+kid.country+'的'+kid.name+'，我家的水來自安全管理的飲用水，打開水龍頭，1 分鐘就有 20 公升。全球有 '+popText(LEVELS[0].pop)+'和我過著差不多的早晨。你在80億分之1中，出生在哪裡？';
   $('copyMsg').textContent='';
 }
-const GAME_URL='';   // TODO: put the final game link here
 $('copy').onclick=()=>{
-  const t=(S.shareText||'')+'\n\n你也來玩玩：\n'+GAME_URL;
+  const t=S.shareText||'';
   if(!navigator.clipboard){ $('copyMsg').textContent=t; return; }
   navigator.clipboard.writeText(t).then(()=>{$('copyMsg').textContent='已複製';}).catch(()=>{$('copyMsg').textContent=t;});
 };
