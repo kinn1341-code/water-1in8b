@@ -1069,7 +1069,7 @@ function finish(){
   $('again').onclick=startWho;
   const enc=S.trouble.filter(x=>x.startsWith('遇到')).map(x=>x.slice(2)), oth=S.trouble.filter(x=>!x.startsWith('遇到'));
   const meet = (enc.length?'，路上遇到'+enc.join('、'):'') + (oth.length?(enc.length?'，':'，路上')+oth.join('，'):'');
-  S.shareText = '我在「80億分之1 取水路」是一個出生在'+kid.country+'的'+kid.name+'，我家的水來自'+l.name+'，我要到'+SRC[srcKey].name+'取水，總共走了 '+S.dist.toFixed(1)+' 公里，花了 '+dur(mins)+'，'
+  S.shareText = '我在「80億分之1 取水路」是出生在'+kid.country+'的'+kid.name+'，我家的水來自'+l.name+'，我要到'+SRC[srcKey].name+'取水，總共走了 '+S.dist.toFixed(1)+' 公里，花了 '+dur(mins)+'，'
     +(S.emptyHome?'最後空手回家':'帶回 '+Math.round(S.liters)+' 公升的水')+meet+(S.falls>0?'，跌倒 '+S.falls+' 次':'')
     +(S.emptyHome?'，累到沒去上學':late>0?'，上學遲到 '+dur(late):'，準時到校')
     +'。全球有 '+popText(l.pop)+'和我過著差不多的早晨。你在80億分之1中，出生在哪裡？';
@@ -1086,7 +1086,7 @@ function finishSafe(){
     .map(x=>`<li><time>${x[0]}</time><span>${x[1]}</span></li>`).join('');
   $('rBtns').innerHTML='<button class="btn" id="again">再轉一次，換成取水的人</button>';
   $('again').onclick=startDraw;
-  S.shareText='我在「80億分之1 取水路」是一個出生在'+kid.country+'的'+kid.name+'，我家的水來自安全管理的飲用水，打開水龍頭，1 分鐘就有 20 公升。全球有 '+popText(LEVELS[0].pop)+'和我過著差不多的早晨。你在80億分之1中，出生在哪裡？';
+  S.shareText='我在「80億分之1 取水路」是出生在'+kid.country+'的'+kid.name+'，我家的水來自安全管理的飲用水，打開水龍頭，1 分鐘就有 20 公升。全球有 '+popText(LEVELS[0].pop)+'和我過著差不多的早晨。你在80億分之1中，出生在哪裡？';
   $('copyMsg').textContent='';
 }
 const GAME_URL='';   // TODO: put the final game link here
