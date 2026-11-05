@@ -1067,7 +1067,7 @@ function finish(){
   $('rLog').innerHTML = S.log.map(x=>`<li><time>${hhmm(x[0])}</time><span>${x[1]}</span></li>`).join('');
   $('rBtns').innerHTML = '<button class="btn" id="again">再出生一次</button>';
   $('again').onclick=startWho;
-  S.shareText = '我在「80億分之1・取水版」抽到「'+l.name+'」，走到'+SRC[srcKey].name+'取水，總共走了 '+S.dist.toFixed(1)+' 公里、花了 '+dur(mins)+'，'+(S.emptyHome?'最後空手回家':'帶回 '+Math.round(S.liters)+' 公升')
+  S.shareText = '我在「80億分之1 取水路」抽到「'+l.name+'」，走到'+SRC[srcKey].name+'取水，總共走了 '+S.dist.toFixed(1)+' 公里、花了 '+dur(mins)+'，'+(S.emptyHome?'最後空手回家':'帶回 '+Math.round(S.liters)+' 公升')
     +(tl.length?'，路上'+tl.join('、'):'')+(S.emptyHome?'，累到沒去上學':late>0?'，上學遲到 '+dur(late):'')+'。全世界有 '+popText(l.pop)+'過著這樣的早上。';
   $('copyMsg').textContent='';
 }
@@ -1082,11 +1082,12 @@ function finishSafe(){
     .map(x=>`<li><time>${x[0]}</time><span>${x[1]}</span></li>`).join('');
   $('rBtns').innerHTML='<button class="btn" id="again">再轉一次，換成取水的人</button>';
   $('again').onclick=startDraw;
-  S.shareText='我在「80億分之1・取水版」轉到自來水，1 分鐘就有 20 公升。全世界還有約 22 億人沒有安全的飲用水，每天天亮前就要出門取水。';
+  S.shareText='我在「80億分之1 取水路」轉到自來水，1 分鐘就有 20 公升。全世界還有約 22 億人沒有安全的飲用水，每天天亮前就要出門取水。';
   $('copyMsg').textContent='';
 }
+const GAME_URL='https://kinn1341-code.github.io/water-1in8b/color/';
 $('copy').onclick=()=>{
-  const t=S.shareText||'';
+  const t=(S.shareText||'')+'\n\n你也來玩玩：\n'+GAME_URL;
   if(!navigator.clipboard){ $('copyMsg').textContent=t; return; }
   navigator.clipboard.writeText(t).then(()=>{$('copyMsg').textContent='已複製';}).catch(()=>{$('copyMsg').textContent=t;});
 };
