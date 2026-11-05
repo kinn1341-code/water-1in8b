@@ -268,8 +268,7 @@ body{background:var(--paper)}
     </div>
     <div class="legend" id="legend"></div>
     <div class="idcard" id="idcard" hidden>
-      <div class="idnum" id="idnum"></div>
-      <p class="idnote">全球共有 82 億人，每人都有一個號碼。<br>這是你在全球人口中隨機抽到的號碼。</p>
+      <p class="idnote" id="idnum"></p>
       <h2 id="idTitle" style="margin-top:6px"></h2>
       <p id="idDesc"></p>
       <div class="center"><button class="btn" id="start">出門取水</button></div>
@@ -437,7 +436,7 @@ let popNum=0;
 function revealDraw(l){
   [...$('legend').querySelectorAll('div')].forEach(d=>d.classList.toggle('hit', d.dataset.id===l.id));
   popNum = Math.floor(rnd()*8.2e9)+1;
-  $('idnum').textContent = '你的人口編號：第 '+popNum.toLocaleString('zh-TW')+' 號';
+  $('idnum').innerHTML = '全球約有 82 億人，每人都有一個號碼，<br>你的人口編號是 <b>'+popNum.toLocaleString('zh-TW')+'</b> 號。';
   $('drawEyebrow').textContent = '轉到了'; $('drawSub').hidden=true; $('drawSub').textContent='按一下轉盤，讓它停下來';
   $('drawTitle').textContent = '你家的水：'+l.name;
   $('idTitle').innerHTML = '全球有 <span class="hl">'+popText(l.pop).replace('人','')+'</span>人<br>和你一樣';
