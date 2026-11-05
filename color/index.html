@@ -436,7 +436,7 @@ let popNum=0;
 function revealDraw(l){
   [...$('legend').querySelectorAll('div')].forEach(d=>d.classList.toggle('hit', d.dataset.id===l.id));
   popNum = Math.floor(rnd()*8.2e9)+1;
-  $('idnum').innerHTML = '全球約有 82 億人，每人都有一個號碼，<br>你的人口編號是 <b>'+popNum.toLocaleString('zh-TW')+'</b> 號。';
+  $('idnum').innerHTML = '全球約有 82 億人，你的人口編號是 <b>'+popNum.toLocaleString('zh-TW')+'</b> 號。';
   $('drawEyebrow').textContent = '轉到了'; $('drawSub').hidden=true; $('drawSub').textContent='按一下轉盤，讓它停下來';
   $('drawTitle').textContent = '你家的水：'+l.name;
   $('idTitle').innerHTML = '全球有 <span class="hl">'+popText(l.pop).replace('人','')+'</span>人<br>和你一樣';
