@@ -147,7 +147,7 @@ p{margin:0 0 12px}
 .bib-body li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
 .bib-body li i{font-style:normal;width:28px;height:28px;border-radius:50%;background:#FFEBE1;color:var(--orange-deep);font-weight:900;display:grid;place-items:center;font-size:14px}
 .bib-body a.btn{text-decoration:none;justify-self:center;text-align:center}
-.note{font-size:12px;color:var(--muted);margin-top:28px;border-top:1px solid var(--line);padding-top:12px}
+.note{font-size:11px;color:var(--muted);margin-top:28px;border-top:1px solid var(--line);padding-top:12px}
 .nw{white-space:nowrap}
 .center{display:flex;justify-content:center}
 .hl{color:#FF5515}
@@ -169,7 +169,7 @@ p{margin:0 0 12px}
   .bib-body{padding:16px 16px 22px}
   .bib-body a.btn{display:block;width:100%;padding:14px 16px;font-size:17px;line-height:1.5}
   .kbd{display:none}
-  .note{line-height:1.7}
+  .note{line-height:1.7;font-size:11px}
 }
 .screen{animation:in .35s ease-out}
 /* ---- colour edition ---- */
@@ -734,13 +734,14 @@ function drawToon(o){
   if(mood==='tired'||mood==='strain'){ ctx.fillStyle='#8FD3F4';
     if(mood==='tired'){ ctx.beginPath(); ctx.moveTo(ex-13*d,hy-2); ctx.quadraticCurveTo(ex-16*d,hy+3,ex-13*d,hy+4); ctx.quadraticCurveTo(ex-10*d,hy+3,ex-13*d,hy-2); ctx.fill(); } ctx.beginPath(); ctx.moveTo(ex+12*d,hy-hr+4); ctx.quadraticCurveTo(ex+16*d,hy-hr+10,ex+12*d,hy-hr+11); ctx.quadraticCurveTo(ex+8*d,hy-hr+10,ex+12*d,hy-hr+4); ctx.fill(); }
 }
+const KS=2.2;                              // walker size on screen
 function drawWalker(t){
   const x=px(S.wx), moving=S.holding&&/out|back/.test(S.phase)&&S.stun<=0&&!S.frozen;
   const ph=moving? t*9 : 0, sw=Math.sin(ph)*0.5, fallen=S.stun>0;
   const back=S.phase==='back'||S.phase==='dusk'||(S.phase==='event'&&S.legBack), dir=back?-1:1;
   // shadow from sun
-  if(LIGHT>0.4){ const sd=clamp((S.sun.sx-x)/400,-1,1); ctx.fillStyle=`rgba(0,0,0,${0.18*LIGHT})`; ctx.beginPath(); ctx.ellipse(x-sd*26,GY+2,24,4,0,0,7); ctx.fill(); }
-  ctx.save(); ctx.translate(x,GY);
+  if(LIGHT>0.4){ const sd=clamp((S.sun.sx-x)/400,-1,1); ctx.fillStyle=`rgba(0,0,0,${0.18*LIGHT})`; ctx.beginPath(); ctx.ellipse(x-sd*26*KS,GY+2,24*KS,4*KS,0,0,7); ctx.fill(); }
+  ctx.save(); ctx.translate(x,GY); ctx.scale(KS,KS);
   if(fallen){ ctx.rotate(1.25*dir); ctx.translate(-8*dir,-4); }
   const carrying = back && S.liters>0;
   const mood = fallen ? 'hurt' : (S.react||$('alert').hidden===false&&!$('alert').classList.contains('calm')) ? 'scared'
