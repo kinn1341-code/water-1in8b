@@ -84,11 +84,11 @@ p{margin:0 0 12px}
 .alert small{display:block;font-weight:500;font-size:13px;opacity:.9}
 .alert.calm{background:rgba(17,18,34,.88);box-shadow:none;text-align:center;justify-content:center}
 .alert.calm>div{text-align:center}
-/* keep alerts on the right so they never cover the child or the can on her head; small, never wrapped */
-.alert{left:auto;right:8px;top:54px;width:auto;max-width:none;padding:7px 10px;font-size:12px!important;white-space:nowrap;gap:0}
+/* keep alerts on the left (child walks centre-right) so they never cover the child or the can on her head; small, never wrapped */
+.alert{left:8px;right:auto;top:12px;width:auto;max-width:none;padding:7px 10px;font-size:12px!important;white-space:nowrap;gap:0}
 .alert>div{text-align:center}
 .alert small{font-size:12px!important;font-weight:500}
-@media (min-width:481px){.alert,.alert small{font-size:16px!important}.alert{padding:9px 14px}}
+@media (min-width:481px){.alert,.alert small{font-size:20px!important}.alert{padding:10px 16px}}
 .caption{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-weight:700;font-size:clamp(15px,3.8vw,20px);text-shadow:0 1px 6px rgba(0,0,0,.7);padding:0 16px}
 .skip{position:absolute;right:10px;top:10px;background:rgba(17,18,34,.6);color:#fff;border:0;border-radius:999px;padding:6px 12px;font-size:13px}
 .hud{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:end;margin:14px 0 10px}
@@ -115,9 +115,9 @@ p{margin:0 0 12px}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border-radius:10px;overflow:hidden;margin:16px 0 20px}
 .stats div{background:var(--card);padding:14px 16px;min-width:0}
 .stats dt{font-size:13px;color:var(--muted)}
-.stats dd{margin:0;font-family:var(--mono);font-weight:600;font-size:22px;font-variant-numeric:tabular-nums}
+.stats dd{margin:0;font-family:var(--mono);font-weight:700;font-size:20px;line-height:1.4;font-variant-numeric:tabular-nums}
 .stats div:last-child:nth-child(odd){grid-column:1/-1}
-.stats dd.txt{font-family:var(--body);font-size:16px;font-weight:700;line-height:1.4}
+.stats dd.txt{font-family:var(--body);font-size:20px;font-weight:700;line-height:1.4}
 .bad{color:var(--warn)}
 .log{margin:0 0 24px;padding:0;list-style:none;display:grid;gap:8px;font-size:15px}
 .log li{display:grid;grid-template-columns:52px 1fr;gap:10px}
@@ -126,7 +126,7 @@ p{margin:0 0 12px}
 .facts li{display:grid;grid-template-columns:108px 1fr;gap:14px;align-items:baseline}
 .facts li b{white-space:nowrap}
 .facts b{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--orange);white-space:nowrap}
-.facts small{display:block;color:var(--muted);font-size:12px}
+.facts small{display:block;color:var(--muted);font-size:12px;white-space:nowrap}
 .counter a,.facts a,.legend a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .facts a:hover,.legend a:hover{color:var(--orange-deep)}
 .bib{position:relative;background:var(--card);border-radius:8px;overflow:hidden;margin-bottom:20px}
@@ -168,7 +168,7 @@ p{margin:0 0 12px}
   .legend div{gap:8px}
   .facts li{grid-template-columns:1fr;gap:2px}
   .facts small{margin-top:2px}
-  .stats dd{font-size:20px}
+  .stats dd,.stats dd.txt{font-size:17px}
   .log li{grid-template-columns:56px 1fr}
   .bib-body{padding:16px 16px 22px}
   .bib-body a.btn{display:block;width:100%;padding:14px 16px;font-size:17px;line-height:1.5}
@@ -310,9 +310,9 @@ body{background:linear-gradient(180deg,#FFE8D9 0,#FFF8F2 520px) no-repeat,var(--
     <ul class="log" id="rLog"></ul>
     <div class="row" style="margin-bottom:28px;justify-content:center" id="rBtns"></div>
     <ul class="facts">
-      <li><b>約 22 億</b><span>人沒有安全管理的飲用水，其中 1.06 億人直接喝河流、池塘的水。<small><a href="https://data.unicef.org/resources/jmp-report-2025/" target="_blank" rel="noopener">WHO / UNICEF JMP 2025</a></small></span></li>
-      <li><b>1,000 名</b><span>5 歲以下兒童，每天因為不安全的水和衛生環境而死亡。<small><a href="https://www.unicef.org/press-releases/triple-threat-water-related-crises-endangering-lives-190-million-children-unicef" target="_blank" rel="noopener">UNICEF《Triple Threat》</a></small></span></li>
-      <li><b>4.29 億</b><span>學齡兒童在學校喝不到基本供水，其中 2.58 億人的學校完全沒有水。<small><a href="https://data.unicef.org/resources/jmp-wash-in-schools-2026/" target="_blank" rel="noopener">WHO / UNICEF JMP 2026</a></small></span></li>
+      <li><b>約 22 億</b><span>人沒有安全管理的飲用水，其中 1.06 億人直接喝<span style="white-space:nowrap">河流</span>、池塘的水。<small><a href="https://data.unicef.org/resources/jmp-report-2025/" target="_blank" rel="noopener">WHO / UNICEF JMP 2025</a></small></span></li>
+      <li><b>1,000 名</b><span>5 歲以下兒童，每天因為不安全的水和衛生環境而<span style="white-space:nowrap">死亡。</span><small><a href="https://www.unicef.org/press-releases/triple-threat-water-related-crises-endangering-lives-190-million-children-unicef" target="_blank" rel="noopener">UNICEF《Triple Threat》</a></small></span></li>
+      <li><b>2.58 億</b><span>學童學校完全沒有飲水設施，僅能依賴未受保護的<span style="white-space:nowrap">劣質水源。</span><small><a href="https://data.unicef.org/resources/jmp-wash-in-schools-2026/" target="_blank" rel="noopener">WHO / UNICEF JMP 2026</a></small></span></li>
     </ul>
     <div class="bib">
       <span class="pin" style="left:10px;top:10px"></span><span class="pin" style="right:10px;top:10px"></span>
@@ -773,7 +773,7 @@ function drawWalker(t){
 }
 function render(now){
   const t=now/1000;
-  CAM = clamp(S.wx-W*0.34, -40, WORLD.len-W+120);
+  CAM = clamp(S.wx-W*0.56, -W, WORLD.len-W+120);
   S.sun = drawSky(S.clock);
   const haze=(day,night,h)=>rgb(mixc(mixc(night,day,LIGHT),HOR,h));
   const th=theme();
