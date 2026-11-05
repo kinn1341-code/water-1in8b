@@ -386,6 +386,8 @@ const t0 = performance.now(), perSec = 2e8/86400; let introRaf;
 let level, srcKey;
 // wheel odds (deliberately skewed toward hard water access); real-world shares stay in the legend
 const ODDS={safe:5,limited:30,basic:5,unimproved:30,surface:30};
+// test links: add #safe / #basic / #limited / #unimproved / #surface to the URL to always land on that level
+(function(){ const h=(location.hash||'').slice(1); if(h in ODDS){ for(const k in ODDS) ODDS[k]=(k===h?100:0); } })();
 const ORDER=['safe','limited','basic','unimproved','surface'];
 const LBY=id=>LEVELS.find(l=>l.id===id);
 // the wheel face shows five equal slices; the landing odds come from ODDS, not from slice size
