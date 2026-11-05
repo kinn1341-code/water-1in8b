@@ -84,6 +84,10 @@ p{margin:0 0 12px}
 .alert small{display:block;font-weight:500;font-size:13px;opacity:.9}
 .alert.calm{background:rgba(17,18,34,.88);box-shadow:none;text-align:center;justify-content:center}
 .alert.calm>div{text-align:center}
+/* keep alerts on the right so they never cover the child or the can on her head */
+.alert{left:auto;right:8px;top:54px;width:min(43%,320px);flex-direction:column;gap:6px;padding:10px 12px}
+.alert>div{text-align:center}
+.alert .burst{width:40px;height:40px}
 .caption{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-weight:700;font-size:clamp(15px,3.8vw,20px);text-shadow:0 1px 6px rgba(0,0,0,.7);padding:0 16px}
 .skip{position:absolute;right:10px;top:10px;background:rgba(17,18,34,.6);color:#fff;border:0;border-radius:999px;padding:6px 12px;font-size:13px}
 .hud{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:end;margin:14px 0 10px}
@@ -160,7 +164,7 @@ p{margin:0 0 12px}
   .opt small,.choice .small,.stats dt,.log,.facts small,.note,.bib-top span,.bib-meta dt,.bib-meta dd,
   .alert small,.skip,.caption,#copyMsg,.who dt{font-size:16px}
   .eyebrow{letter-spacing:.04em}
-  .alert{font-size:17px}
+  .alert{font-size:16px;padding:8px 10px} .alert .burst{width:32px;height:32px}
   .legend div{gap:8px}
   .facts li{grid-template-columns:1fr;gap:2px}
   .facts small{margin-top:2px}
